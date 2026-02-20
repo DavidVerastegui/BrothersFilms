@@ -509,6 +509,45 @@
       border-bottom: 2px solid var(--gold)
     }
 
+    .pay-input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+      outline: none;
+      padding: 0;
+    }
+
+    .pay-input:focus {
+      border-bottom: 1px solid var(--gold);
+      background: #fffdf7;
+    }
+
+    .pay-input:disabled,
+    .pay-input.disabled {
+      color: var(--gray);
+    }
+
+    .pay-table td.pay-cell {
+      padding: 4px 11px;
+      position: relative;
+    }
+
+    .pay-currency {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      pointer-events: none;
+    }
+
+    .pay-cell input {
+      padding-left: 12px;
+    }
+
     /* ── NOTAS ── */
     .notes-box {
       background: #f8f5ef;
@@ -1118,13 +1157,18 @@
 
       <!-- ⑤ PAGOS -->
       <div class="section">
-        <div class="section-title">⑤ Plan de Pagos</div>
+        <div class="section-title">
+          ⑤ Plan de Pagos
+          <span id="badge-pagado"
+            style="display:none; margin-left:12px; font-size:11px; background:var(--green); color:#fff; padding:3px 10px; border-radius:12px; font-weight:700;">✅
+            PAGADO EN SU TOTALIDAD</span>
+        </div>
         <div class="pay-table-wrapper">
           <table class="pay-table" id="pay-table">
             <thead>
               <tr>
                 <th>Concepto</th>
-                <th>Monto (MXN)</th>
+                <th style="width:120px">Monto (MXN)</th>
                 <th>Fecha de Pago</th>
                 <th>Forma de Pago</th>
                 <th>✓</th>
@@ -1133,59 +1177,65 @@
             <tbody>
               <tr class="total-row">
                 <td>Total del Contrato</td>
-                <td id="total-amt" contenteditable="true">$__________</td>
+                <td id="total-amt">$__________</td>
                 <td>—</td>
                 <td>—</td>
                 <td>—</td>
               </tr>
               <tr>
                 <td>Anticipo (reserva)</td>
-                <td contenteditable="true">$__________</td>
-                <td contenteditable="true">__/__/____</td>
-                <td contenteditable="true">___________</td>
-                <td contenteditable="true">□</td>
+                <td class="pay-cell"><span class="pay-currency">$</span><input type="number" class="pay-input amt-input"
+                    placeholder="0" oninput="updateSaldo()"></td>
+                <td class="pay-date"><input type="date" class="pay-input" style="font-size:11px"></td>
+                <td class="pay-method"><input type="text" class="pay-input" placeholder="Efectivo/Transferencia"></td>
+                <td class="pay-check"><input type="checkbox"></td>
               </tr>
               <tr>
                 <td>Abono 1</td>
-                <td contenteditable="true">$__________</td>
-                <td contenteditable="true">__/__/____</td>
-                <td contenteditable="true">___________</td>
-                <td contenteditable="true">□</td>
+                <td class="pay-cell"><span class="pay-currency">$</span><input type="number" class="pay-input amt-input"
+                    placeholder="0" oninput="updateSaldo()"></td>
+                <td class="pay-date"><input type="date" class="pay-input" style="font-size:11px"></td>
+                <td class="pay-method"><input type="text" class="pay-input" placeholder="Efectivo/Transferencia"></td>
+                <td class="pay-check"><input type="checkbox"></td>
               </tr>
               <tr>
                 <td>Abono 2</td>
-                <td contenteditable="true">$__________</td>
-                <td contenteditable="true">__/__/____</td>
-                <td contenteditable="true">___________</td>
-                <td contenteditable="true">□</td>
+                <td class="pay-cell"><span class="pay-currency">$</span><input type="number" class="pay-input amt-input"
+                    placeholder="0" oninput="updateSaldo()"></td>
+                <td class="pay-date"><input type="date" class="pay-input" style="font-size:11px"></td>
+                <td class="pay-method"><input type="text" class="pay-input" placeholder="Efectivo/Transferencia"></td>
+                <td class="pay-check"><input type="checkbox"></td>
               </tr>
               <tr>
                 <td>Abono 3</td>
-                <td contenteditable="true">$__________</td>
-                <td contenteditable="true">__/__/____</td>
-                <td contenteditable="true">___________</td>
-                <td contenteditable="true">□</td>
+                <td class="pay-cell"><span class="pay-currency">$</span><input type="number" class="pay-input amt-input"
+                    placeholder="0" oninput="updateSaldo()"></td>
+                <td class="pay-date"><input type="date" class="pay-input" style="font-size:11px"></td>
+                <td class="pay-method"><input type="text" class="pay-input" placeholder="Efectivo/Transferencia"></td>
+                <td class="pay-check"><input type="checkbox"></td>
               </tr>
               <tr>
                 <td>Abono 4</td>
-                <td contenteditable="true">$__________</td>
-                <td contenteditable="true">__/__/____</td>
-                <td contenteditable="true">___________</td>
-                <td contenteditable="true">□</td>
+                <td class="pay-cell"><span class="pay-currency">$</span><input type="number" class="pay-input amt-input"
+                    placeholder="0" oninput="updateSaldo()"></td>
+                <td class="pay-date"><input type="date" class="pay-input" style="font-size:11px"></td>
+                <td class="pay-method"><input type="text" class="pay-input" placeholder="Efectivo/Transferencia"></td>
+                <td class="pay-check"><input type="checkbox"></td>
               </tr>
               <tr>
                 <td>Abono 5</td>
-                <td contenteditable="true">$__________</td>
-                <td contenteditable="true">__/__/____</td>
-                <td contenteditable="true">___________</td>
-                <td contenteditable="true">□</td>
+                <td class="pay-cell"><span class="pay-currency">$</span><input type="number" class="pay-input amt-input"
+                    placeholder="0" oninput="updateSaldo()"></td>
+                <td class="pay-date"><input type="date" class="pay-input" style="font-size:11px"></td>
+                <td class="pay-method"><input type="text" class="pay-input" placeholder="Efectivo/Transferencia"></td>
+                <td class="pay-check"><input type="checkbox"></td>
               </tr>
               <tr>
-                <td><strong>Saldo Final (1 mes antes)</strong></td>
-                <td contenteditable="true">$__________</td>
-                <td contenteditable="true">__/__/____</td>
-                <td contenteditable="true">___________</td>
-                <td contenteditable="true">□</td>
+                <td><strong>Saldo Final (Restante)</strong></td>
+                <td id="saldo-final-amt"><strong>$__________</strong></td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
               </tr>
             </tbody>
           </table>
@@ -1435,6 +1485,32 @@
       document.getElementById('s-noprevio').style.display = hasPrevio ? 'none' : 'flex';
       const hasFisico = d.show.some(id => ['s-imp2024', 's-50fotos', 's-caja'].includes(id));
       document.getElementById('s-nofisico').style.display = hasFisico ? 'none' : 'flex';
+
+      // Actualizar saldo
+      if (typeof updateSaldo === 'function') updateSaldo();
+    }
+
+    // ── PLAN DE PAGOS (Cálculos) ──────────────────────────────────────────────
+    function updateSaldo() {
+      const totalText = document.getElementById('total-amt').textContent;
+      const total = parseInt(totalText.replace(/[^\d]/g, '')) || 0;
+
+      let paid = 0;
+      document.querySelectorAll('.amt-input').forEach(input => {
+        paid += parseInt(input.value) || 0;
+      });
+
+      const saldo = total - paid;
+      const saldoEl = document.getElementById('saldo-final-amt');
+      const badge = document.getElementById('badge-pagado');
+
+      if (total > 0 && saldo <= 0) {
+        saldoEl.innerHTML = '<strong style="color:var(--green)">$0 (PAGADO)</strong>';
+        if (badge) badge.style.display = 'inline-block';
+      } else {
+        saldoEl.innerHTML = '<strong>$' + (saldo > 0 ? saldo.toLocaleString('en-US') : '0') + ' MXN</strong>';
+        if (badge) badge.style.display = 'none';
+      }
     }
 
     function initServices() {
@@ -1458,9 +1534,10 @@
   `;
 
       // Bloquear campos de datos (Tanto inputs como div contenteditable)
-      document.querySelectorAll('.info-value, .pay-table td:not(:first-child), .sig-name').forEach(el => {
-        if (el.tagName === 'INPUT') {
+      document.querySelectorAll('.info-value, .pay-table input, .pay-table td:not(:first-child), .sig-name').forEach(el => {
+        if (el.tagName === 'INPUT' || el.type === 'checkbox') {
           el.readOnly = true;
+          if (el.type === 'checkbox') el.disabled = true;
           el.classList.add('disabled');
         } else {
           el.contentEditable = 'false';
@@ -1730,9 +1807,19 @@
       if (!email || !email.includes('@')) return alert('⚠️ Por favor ingresa un correo electrónico válido del cliente.');
       if (!plan) return alert('⚠️ Debes seleccionar un Plan antes de generar el link.');
 
+      // Coleccionar datos de la tabla de pagos
+      const payAmts = Array.from(document.querySelectorAll('.amt-input')).map(i => i.value);
+      const payDates = Array.from(document.querySelectorAll('.pay-date input')).map(i => i.value);
+      const payMethods = Array.from(document.querySelectorAll('.pay-method input')).map(i => i.value);
+      const payChecks = Array.from(document.querySelectorAll('.pay-check input')).map(i => i.checked ? '1' : '0');
+
       const params = new URLSearchParams({
         modo: 'cliente',
-        contratante, novios, fechaEvento, lugar, tel, email, fechaFirma, numContrato, plan
+        contratante, novios, fechaEvento, lugar, tel, email, fechaFirma, numContrato, plan,
+        pamts: payAmts.join(','),
+        pdates: payDates.join(','),
+        pmeths: payMethods.join(','),
+        pchk: payChecks.join(',')
       });
 
       const link = window.location.href.split('?')[0] + '?' + params.toString();
@@ -1774,6 +1861,24 @@
       const plan = params.get('plan');
       if (plan && planData[plan]) selectPlan(plan, true); // force=true para pasar el guard
 
+      // Cargar tabla de pagos
+      const pAmts = (params.get('pamts') || '').split(',');
+      const pDates = (params.get('pdates') || '').split(',');
+      const pMeths = (params.get('pmeths') || '').split(',');
+      const pChk = (params.get('pchk') || '').split(',');
+
+      const amtInputs = document.querySelectorAll('.amt-input');
+      const dateInputs = document.querySelectorAll('.pay-date input');
+      const methInputs = document.querySelectorAll('.pay-method input');
+      const chkInputs = document.querySelectorAll('.pay-check input');
+
+      amtInputs.forEach((el, i) => { if (pAmts[i]) el.value = pAmts[i]; });
+      dateInputs.forEach((el, i) => { if (pDates[i]) el.value = pDates[i]; });
+      methInputs.forEach((el, i) => { if (pMeths[i]) el.value = pMeths[i]; });
+      chkInputs.forEach((el, i) => { if (pChk[i] === '1') el.checked = true; });
+
+      updateSaldo(); // Refrescar cálculo
+
       // Cambiar automáticamente a modo cliente
       switchToClientMode();
     }
@@ -1787,6 +1892,8 @@
       setVal('f-tel', '8441234567');
       setVal('f-email', 'ana.carlos2026@gmail.com');
       selectPlan('estandar');
+      document.querySelectorAll('.amt-input')[0].value = 5000;
+      updateSaldo();
     }
   </script>
 </body>

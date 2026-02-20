@@ -229,20 +229,27 @@
     }
 
     .info-value {
+      border: none;
       border-bottom: 1px solid var(--border);
       min-height: 28px;
       font-size: 13px;
       padding: 2px 4px;
       color: var(--dark);
-      border-radius: 3px 3px 0 0
+      border-radius: 3px 3px 0 0;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      background: transparent;
     }
 
+    .info-value:focus,
     .info-value[contenteditable="true"]:focus {
       outline: none;
       border-bottom-color: var(--gold);
       background: #fffdf7
     }
 
+    .info-value:disabled,
+    .info-value.disabled,
     .info-value[contenteditable="false"] {
       background: #f7f5f0;
       color: var(--gray)
@@ -759,6 +766,17 @@
       .sig-grid {
         grid-template-columns: 1fr
       }
+
+      .pay-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        padding-bottom: 5px;
+      }
+
+      .pay-table {
+        min-width: 550px;
+      }
     }
   </style>
 </head>
@@ -801,31 +819,31 @@
         <div class="info-grid">
           <div class="info-field">
             <span class="info-label">Nombre del Contratante</span>
-            <div class="info-value" id="f-contratante" contenteditable="true"></div>
+            <input type="text" class="info-value" id="f-contratante" placeholder="Ej. María González">
           </div>
           <div class="info-field">
             <span class="info-label">Fecha de Firma</span>
-            <div class="info-value" id="f-fecha-firma" contenteditable="true"></div>
+            <input type="date" class="info-value" id="f-fecha-firma">
           </div>
           <div class="info-field full">
             <span class="info-label">Nombre de los Novios</span>
-            <div class="info-value" id="f-novios" contenteditable="true"></div>
+            <input type="text" class="info-value" id="f-novios" placeholder="Ej. Ana & Carlos">
           </div>
           <div class="info-field">
             <span class="info-label">Fecha del Evento</span>
-            <div class="info-value" id="f-fecha-evento" contenteditable="true"></div>
+            <input type="date" class="info-value" id="f-fecha-evento">
           </div>
           <div class="info-field">
             <span class="info-label">Lugar / Ciudad de la Recepción</span>
-            <div class="info-value" id="f-lugar" contenteditable="true"></div>
+            <input type="text" class="info-value" id="f-lugar" placeholder="Ej. Hacienda San Agustín, Saltillo">
           </div>
           <div class="info-field">
             <span class="info-label">Teléfono de Contacto</span>
-            <div class="info-value" id="f-tel" contenteditable="true"></div>
+            <input type="tel" class="info-value" id="f-tel" placeholder="Ej. 844 123 4567">
           </div>
           <div class="info-field">
             <span class="info-label">Correo Electrónico</span>
-            <div class="info-value" id="f-email" contenteditable="true"></div>
+            <input type="email" class="info-value" id="f-email" placeholder="Para enviar confirmación">
           </div>
         </div>
         <div class="contract-num">No. de Contrato: <span id="contract-num">BFS-2026-___</span></div>
@@ -1083,75 +1101,77 @@
       <!-- ⑤ PAGOS -->
       <div class="section">
         <div class="section-title">⑤ Plan de Pagos</div>
-        <table class="pay-table" id="pay-table">
-          <thead>
-            <tr>
-              <th>Concepto</th>
-              <th>Monto (MXN)</th>
-              <th>Fecha de Pago</th>
-              <th>Forma de Pago</th>
-              <th>✓</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="total-row">
-              <td>Total del Contrato</td>
-              <td id="total-amt" contenteditable="true">$__________</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>Anticipo (reserva)</td>
-              <td contenteditable="true">$__________</td>
-              <td contenteditable="true">__/__/____</td>
-              <td contenteditable="true">___________</td>
-              <td contenteditable="true">□</td>
-            </tr>
-            <tr>
-              <td>Abono 1</td>
-              <td contenteditable="true">$__________</td>
-              <td contenteditable="true">__/__/____</td>
-              <td contenteditable="true">___________</td>
-              <td contenteditable="true">□</td>
-            </tr>
-            <tr>
-              <td>Abono 2</td>
-              <td contenteditable="true">$__________</td>
-              <td contenteditable="true">__/__/____</td>
-              <td contenteditable="true">___________</td>
-              <td contenteditable="true">□</td>
-            </tr>
-            <tr>
-              <td>Abono 3</td>
-              <td contenteditable="true">$__________</td>
-              <td contenteditable="true">__/__/____</td>
-              <td contenteditable="true">___________</td>
-              <td contenteditable="true">□</td>
-            </tr>
-            <tr>
-              <td>Abono 4</td>
-              <td contenteditable="true">$__________</td>
-              <td contenteditable="true">__/__/____</td>
-              <td contenteditable="true">___________</td>
-              <td contenteditable="true">□</td>
-            </tr>
-            <tr>
-              <td>Abono 5</td>
-              <td contenteditable="true">$__________</td>
-              <td contenteditable="true">__/__/____</td>
-              <td contenteditable="true">___________</td>
-              <td contenteditable="true">□</td>
-            </tr>
-            <tr>
-              <td><strong>Saldo Final (1 mes antes)</strong></td>
-              <td contenteditable="true">$__________</td>
-              <td contenteditable="true">__/__/____</td>
-              <td contenteditable="true">___________</td>
-              <td contenteditable="true">□</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="pay-table-wrapper">
+          <table class="pay-table" id="pay-table">
+            <thead>
+              <tr>
+                <th>Concepto</th>
+                <th>Monto (MXN)</th>
+                <th>Fecha de Pago</th>
+                <th>Forma de Pago</th>
+                <th>✓</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="total-row">
+                <td>Total del Contrato</td>
+                <td id="total-amt" contenteditable="true">$__________</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>Anticipo (reserva)</td>
+                <td contenteditable="true">$__________</td>
+                <td contenteditable="true">__/__/____</td>
+                <td contenteditable="true">___________</td>
+                <td contenteditable="true">□</td>
+              </tr>
+              <tr>
+                <td>Abono 1</td>
+                <td contenteditable="true">$__________</td>
+                <td contenteditable="true">__/__/____</td>
+                <td contenteditable="true">___________</td>
+                <td contenteditable="true">□</td>
+              </tr>
+              <tr>
+                <td>Abono 2</td>
+                <td contenteditable="true">$__________</td>
+                <td contenteditable="true">__/__/____</td>
+                <td contenteditable="true">___________</td>
+                <td contenteditable="true">□</td>
+              </tr>
+              <tr>
+                <td>Abono 3</td>
+                <td contenteditable="true">$__________</td>
+                <td contenteditable="true">__/__/____</td>
+                <td contenteditable="true">___________</td>
+                <td contenteditable="true">□</td>
+              </tr>
+              <tr>
+                <td>Abono 4</td>
+                <td contenteditable="true">$__________</td>
+                <td contenteditable="true">__/__/____</td>
+                <td contenteditable="true">___________</td>
+                <td contenteditable="true">□</td>
+              </tr>
+              <tr>
+                <td>Abono 5</td>
+                <td contenteditable="true">$__________</td>
+                <td contenteditable="true">__/__/____</td>
+                <td contenteditable="true">___________</td>
+                <td contenteditable="true">□</td>
+              </tr>
+              <tr>
+                <td><strong>Saldo Final (1 mes antes)</strong></td>
+                <td contenteditable="true">$__________</td>
+                <td contenteditable="true">__/__/____</td>
+                <td contenteditable="true">___________</td>
+                <td contenteditable="true">□</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- ⑥ NOTAS -->
@@ -1328,15 +1348,30 @@
     const ctxs = {};
     let drawing = {};
 
+    // ── HELPERS ──────────────────────────────────────────────────────────────
+    function val(id) {
+      const el = document.getElementById(id);
+      if (!el) return '';
+      return (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') ? el.value.trim() : el.textContent.trim();
+    }
+    function setVal(id, text) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.value = text;
+      else el.textContent = text;
+    }
+
     // ── INIT ─────────────────────────────────────────────────────────────────
     window.addEventListener('DOMContentLoaded', () => {
       const today = new Date();
-      document.getElementById('contract-date').textContent =
-        today.toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
-      document.getElementById('f-fecha-firma').textContent =
-        today.toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
+      // YYYY-MM-DD para inputs tipo date
+      const isoDate = today.toISOString().split('T')[0];
+
+      setVal('contract-date', today.toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' }));
+      setVal('f-fecha-firma', isoDate); // Ahora será input de fecha
+
       const rnd = Math.floor(Math.random() * 900) + 100;
-      document.getElementById('contract-num').textContent = `BFS-${today.getFullYear()}-${rnd}`;
+      setVal('contract-num', `BFS-${today.getFullYear()}-${rnd}`);
 
       initCanvas('client');
       initCanvas('brothers');
@@ -1404,10 +1439,12 @@
     <button class="mbtn mbtn-dark" onclick="window.print()">🖨️ Imprimir</button>
   `;
 
-      // Bloquear campos de datos
-      document.querySelectorAll('[contenteditable="true"]').forEach(el => {
-        // Solo bloquear los de info del contrato y plan, no los de pagos y firma
-        if (!el.closest('.pay-table') && !el.closest('.sig-section')) {
+      // Bloquear campos de datos (Tanto inputs como div contenteditable)
+      document.querySelectorAll('.info-value, .pay-table td:not(:first-child), .sig-name').forEach(el => {
+        if (el.tagName === 'INPUT') {
+          el.readOnly = true;
+          el.classList.add('disabled');
+        } else {
           el.contentEditable = 'false';
         }
       });
@@ -1527,9 +1564,9 @@
       // Limpiar campo primero, luego pre-rellenar con email del cliente si existe
       const inputEl = document.getElementById('email-input');
       inputEl.value = '';
-      const emailField = document.getElementById('f-email');
-      if (emailField && emailField.textContent.trim()) {
-        inputEl.value = emailField.textContent.trim();
+      const emailField = val('f-email');
+      if (emailField) {
+        inputEl.value = emailField;
       }
       // Seleccionar todo el texto para que el usuario pueda reemplazarlo fácilmente
       setTimeout(() => { inputEl.select(); inputEl.focus(); }, 100);
@@ -1586,13 +1623,13 @@
 
       try {
         // 1) Recopilar datos del contrato
-        const contratante = document.getElementById('f-contratante').textContent.trim() || 'Cliente';
-        const numContrato = document.getElementById('contract-num')?.textContent.trim() || 'BFS';
-        const novios = document.getElementById('f-novios').textContent.trim() || '—';
-        const evento = document.getElementById('f-fecha-evento').textContent.trim() || '—';
-        const lugar = document.getElementById('f-lugar').textContent.trim() || '—';
-        const tel = document.getElementById('f-tel').textContent.trim() || '—';
-        const plan = document.getElementById('plan-badge')?.textContent.trim() || '—';
+        const contratante = val('f-contratante') || 'Cliente';
+        const numContrato = val('contract-num') || 'BFS';
+        const novios = val('f-novios') || '—';
+        const evento = val('f-fecha-evento') || '—';
+        const lugar = val('f-lugar') || '—';
+        const tel = val('f-tel') || '—';
+        const plan = val('plan-badge') || '—';
         const fechaFirma = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
 
         // 2) Enviar vía EmailJS
@@ -1658,20 +1695,22 @@
 
     // ── GENERAR LINK PARA CLIENTE ────────────────────────────────────────────
     function generarLinkCliente() {
-      const contratante = document.getElementById('f-contratante').textContent.trim();
-      const novios = document.getElementById('f-novios').textContent.trim();
-      const fechaEvento = document.getElementById('f-fecha-evento').textContent.trim();
-      const lugar = document.getElementById('f-lugar').textContent.trim();
-      const tel = document.getElementById('f-tel').textContent.trim();
-      const email = document.getElementById('f-email').textContent.trim();
-      const fechaFirma = document.getElementById('f-fecha-firma').textContent.trim();
-      const numContrato = document.getElementById('contract-num').textContent.trim();
+      const contratante = val('f-contratante');
+      const novios = val('f-novios');
+      const fechaEvento = val('f-fecha-evento');
+      const lugar = val('f-lugar');
+      const tel = val('f-tel');
+      const email = val('f-email');
+      const fechaFirma = val('f-fecha-firma');
+      const numContrato = val('contract-num');
       const plan = currentPlan || '';
 
-      if (!contratante && !novios) {
-        alert('⚠️ Llena al menos el nombre del contratante y los novios antes de generar el link.');
-        return;
-      }
+      // VALIDACIONES
+      if (!contratante) return alert('⚠️ El Nombre del Contratante es obligatorio.');
+      if (!novios) return alert('⚠️ El Nombre de los Novios es obligatorio.');
+      if (!fechaEvento) return alert('⚠️ La Fecha del Evento es obligatoria.');
+      if (!email || !email.includes('@')) return alert('⚠️ Por favor ingresa un correo electrónico válido del cliente.');
+      if (!plan) return alert('⚠️ Debes seleccionar un Plan antes de generar el link.');
 
       const params = new URLSearchParams({
         modo: 'cliente',
@@ -1704,15 +1743,14 @@
       if (params.get('modo') !== 'cliente') return;
 
       // Rellenar campos
-      const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
-      set('f-contratante', params.get('contratante'));
-      set('f-novios', params.get('novios'));
-      set('f-fecha-evento', params.get('fechaEvento'));
-      set('f-lugar', params.get('lugar'));
-      set('f-tel', params.get('tel'));
-      set('f-email', params.get('email'));
-      set('f-fecha-firma', params.get('fechaFirma'));
-      set('contract-num', params.get('numContrato'));
+      setVal('f-contratante', params.get('contratante'));
+      setVal('f-novios', params.get('novios'));
+      setVal('f-fecha-evento', params.get('fechaEvento'));
+      setVal('f-lugar', params.get('lugar'));
+      setVal('f-tel', params.get('tel'));
+      setVal('f-email', params.get('email'));
+      setVal('f-fecha-firma', params.get('fechaFirma'));
+      setVal('contract-num', params.get('numContrato'));
 
       // Seleccionar plan
       const plan = params.get('plan');
@@ -1724,12 +1762,12 @@
 
     // ── EJEMPLO ──────────────────────────────────────────────────────────────
     function fillSample() {
-      document.getElementById('f-contratante').textContent = 'María González Pérez';
-      document.getElementById('f-novios').textContent = 'Ana González & Carlos Martínez';
-      document.getElementById('f-fecha-evento').textContent = '15 de agosto de 2026';
-      document.getElementById('f-lugar').textContent = 'Hacienda San Agustín, Saltillo';
-      document.getElementById('f-tel').textContent = '844-123-4567';
-      document.getElementById('f-email').textContent = 'ana.carlos2026@gmail.com';
+      setVal('f-contratante', 'María González Pérez');
+      setVal('f-novios', 'Ana González & Carlos Martínez');
+      setVal('f-fecha-evento', '2026-08-15');
+      setVal('f-lugar', 'Hacienda San Agustín, Saltillo');
+      setVal('f-tel', '8441234567');
+      setVal('f-email', 'ana.carlos2026@gmail.com');
       selectPlan('estandar');
     }
   </script>

@@ -734,7 +734,8 @@
       max-width: 420px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .3)
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+      position: relative
     }
 
     .modal h2 {
@@ -1380,7 +1381,8 @@
   <!-- MODAL: Email para envío de confirmación -->
   <div class="modal-overlay" id="email-modal">
     <div class="modal" style="max-width:460px">
-      <button class="modal-close" onclick="document.getElementById('email-modal').classList.remove('show')" aria-label="Cerrar">✕</button>
+      <button class="modal-close" onclick="document.getElementById('email-modal').classList.remove('show')"
+        aria-label="Cerrar">✕</button>
       <div class="modal-icon">📧</div>
       <h2>¿Dónde enviamos tu copia?</h2>
       <p style="margin-bottom:16px">Ingresa tu correo electrónico y te enviaremos automáticamente un resumen de
@@ -1405,7 +1407,8 @@
   <!-- MODAL: Confirmación de firma -->
   <div class="modal-overlay" id="confirm-modal">
     <div class="modal">
-      <button class="modal-close" onclick="document.getElementById('confirm-modal').classList.remove('show')" aria-label="Cerrar">✕</button>
+      <button class="modal-close" onclick="document.getElementById('confirm-modal').classList.remove('show')"
+        aria-label="Cerrar">✕</button>
       <div class="modal-icon">🎉</div>
       <h2>¡Contrato firmado!</h2>
       <p>Al confirmar, el contrato quedará registrado con tu firma digital. Se generará un PDF para guardar y compartir.

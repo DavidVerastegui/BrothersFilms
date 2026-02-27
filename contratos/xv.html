@@ -708,6 +708,25 @@
       display: flex
     }
 
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: var(--gray-light);
+      cursor: pointer;
+      transition: color .2s;
+      line-height: 1;
+      z-index: 1;
+      padding: 4px 8px
+    }
+
+    .modal-close:hover {
+      color: var(--gold)
+    }
+
     .modal {
       background: #fff;
       border-radius: 12px;
@@ -1369,6 +1388,8 @@
   <!-- MODAL: Email para envío de confirmación -->
   <div class="modal-overlay" id="email-modal">
     <div class="modal" style="max-width:460px">
+      <button class="modal-close" onclick="document.getElementById('email-modal').classList.remove('show')"
+        aria-label="Cerrar">✕</button>
       <div class="modal-icon">📧</div>
       <h2>¿Dónde enviamos tu copia?</h2>
       <p style="margin-bottom:16px">Ingresa tu correo electrónico y te enviaremos automáticamente un resumen de
@@ -1393,6 +1414,8 @@
   <!-- MODAL: Confirmación de firma -->
   <div class="modal-overlay" id="confirm-modal">
     <div class="modal">
+      <button class="modal-close" onclick="document.getElementById('confirm-modal').classList.remove('show')"
+        aria-label="Cerrar">✕</button>
       <div class="modal-icon">🎉</div>
       <h2>¡Contrato firmado!</h2>
       <p>Al confirmar, el contrato quedará registrado con tu firma digital. Se generará un PDF para guardar y compartir.

@@ -1415,7 +1415,7 @@
       </p>
       <div class="modal-actions">
         <button class="mbtn mbtn-green" onclick="showEmailModal()">📧 Enviar copia por correo</button>
-        <button class="mbtn mbtn-dark" onclick="confirmSign(false)">Solo descargar PDF</button>
+        <button class="mbtn mbtn-dark" onclick="descargarPDFDesdeModal(this)">📄 Solo descargar PDF</button>
       </div>
     </div>
   </div>
@@ -1554,7 +1554,7 @@
       // Cambiar acciones del banner
       banner.querySelector('.mode-actions').innerHTML = `
     <button class="mbtn mbtn-green" onclick="showConfirmModal()">✅ Confirmar y Descargar PDF</button>
-    <button class="mbtn mbtn-dark" onclick="window.print()">🖨️ Imprimir</button>
+    <button class="mbtn mbtn-dark" onclick="descargarPDF(this)">🖨️ Descargar PDF</button>
   `;
 
       // Bloquear campos de datos (Tanto inputs como div contenteditable)
@@ -1802,14 +1802,110 @@
 
     function confirmSign(autoPrint = false) {
       const fecha = new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
+      // Cerrar modales
+      document.getElementById('confirm-modal').classList.remove('show');
+      document.getElementById('email-modal').classList.remove('show');
       // Actualizar banner
       document.getElementById('mode-banner').innerHTML =
-        `<div style="display:flex;align-items:center;gap:10px;width:100%;justify-content:center">
+        `<div style="display:flex;align-items:center;gap:10px;width:100%;justify-content:center;flex-wrap:wrap">
           <span style="font-size:18px">✅</span>
           <span>Contrato firmado digitalmente el ${fecha}</span>
-          <button class="mbtn mbtn-gold" onclick="window.print()" style="margin-left:16px">🖸️ Descargar / Imprimir PDF</button>
+          <button class="mbtn mbtn-gold" onclick="descargarPDF(this)" style="margin-left:16px">📄 Descargar PDF</button>
         </div>`;
-      if (autoPrint) setTimeout(() => window.print(), 800);
+      // Auto-descargar PDF
+      if (autoPrint) {
+        setTimeout(() => {
+          const btn = document.querySelector('#mode-banner .mbtn-gold');
+          descargarPDF(btn);
+        }, 800);
+      }
+    }
+
+    // ── DESCARGAR PDF (compatible con móvil) ──────────────────────────────────
+    async function descargarPDF(btnEl) {
+      const originalText = btnEl ? btnEl.textContent : '';
+      try {
+        if (btnEl) {
+          btnEl.textContent = '⏳ Generando PDF...';
+          btnEl.disabled = true;
+        }
+        const numContrato = val('contract-num') || 'BFS';
+        const fileName = `Contrato_BrothersFilms_${numContrato}.pdf`;
+        const pdfBlob = await generarPDFLocal();
+        const urlPDF = URL.createObjectURL(pdfBlob);
+
+        // En móvil, window.open es más confiable que <a download>
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.open(urlPDF, '_blank');
+        } else {
+          const a = document.createElement('a');
+          a.href = urlPDF;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+        setTimeout(() => URL.revokeObjectURL(urlPDF), 10000);
+
+        if (btnEl) {
+          btnEl.textContent = '✅ PDF descargado';
+          btnEl.style.background = '#1a7431';
+          setTimeout(() => {
+            btnEl.textContent = originalText;
+            btnEl.style.background = '';
+            btnEl.disabled = false;
+          }, 3000);
+        }
+      } catch (err) {
+        console.error('Error generando PDF:', err);
+        alert('⚠️ Hubo un error al generar el PDF. Intenta de nuevo.');
+        if (btnEl) {
+          btnEl.textContent = originalText;
+          btnEl.disabled = false;
+        }
+      }
+    }
+
+    // ── DESCARGAR PDF DESDE EL MODAL (cierra modal + descarga + actualiza banner) ──
+    async function descargarPDFDesdeModal(btnEl) {
+      const originalText = btnEl ? btnEl.textContent : '';
+      try {
+        if (btnEl) {
+          btnEl.textContent = '⏳ Generando PDF...';
+          btnEl.disabled = true;
+        }
+        // Cerrar el modal de confirmación
+        document.getElementById('confirm-modal').classList.remove('show');
+
+        const numContrato = val('contract-num') || 'BFS';
+        const fileName = `Contrato_BrothersFilms_${numContrato}.pdf`;
+        const pdfBlob = await generarPDFLocal();
+        const urlPDF = URL.createObjectURL(pdfBlob);
+
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.open(urlPDF, '_blank');
+        } else {
+          const a = document.createElement('a');
+          a.href = urlPDF;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+        setTimeout(() => URL.revokeObjectURL(urlPDF), 10000);
+
+        // Actualizar banner a estado "firmado"
+        confirmSign(false);
+      } catch (err) {
+        console.error('Error generando PDF:', err);
+        alert('⚠️ Hubo un error al generar el PDF. Intenta de nuevo.');
+        if (btnEl) {
+          btnEl.textContent = originalText;
+          btnEl.disabled = false;
+        }
+      }
     }
 
     // ── GENERAR LINK PARA CLIENTE ────────────────────────────────────────────

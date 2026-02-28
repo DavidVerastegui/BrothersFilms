@@ -1079,6 +1079,16 @@
     </main>
 
     <script>
+        window.onerror = function (msg, url, ln, col) {
+            console.error(msg, ln);
+            const div = document.createElement('div');
+            div.style.cssText = "position:fixed;top:0;left:0;background:red;color:white;z-index:9999;padding:20px;font-size:20px;border:3px solid yellow;";
+            div.textContent = "JS ERROR: " + msg + " at line " + ln;
+            document.body.appendChild(div);
+            return false;
+        };
+    </script>
+    <script>
         // ─────────────────────────────── DATA LAYER ──────────────────────────────────
         const STORAGE_KEY = 'bf_eventos_v3';
         const MONTH_ORDER = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -1162,6 +1172,7 @@
 
         // ─────────────────────────────── FORMAT ──────────────────────────────────────
         const fmt = n => '$' + n.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const fmtDate = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : '–';
 
         // ─────────────────────────────── CHARTS ──────────────────────────────────────
         let donutChart, barChart, yearChart;
@@ -1567,9 +1578,8 @@
         document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeConfirm(); } });
 
         // ─────────────────────────────── INIT ────────────────────────────────────────
-        loadData();
         buildCharts();
-        renderAll();
+        loadData();
     </script>
 </body>
 

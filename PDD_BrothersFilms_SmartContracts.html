@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Design Document (PDD) - BrothersFilms</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Mermaid JS -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #64748b;
+            --accent: #b08d57;
+            /* Dorado de BrothersFilms */
+            --bg: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--primary);
+            background-color: var(--bg);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .document-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 50px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            border-radius: 8px;
+            border-top: 8px solid var(--accent);
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        h2 {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            color: var(--accent);
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border);
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .diagram-container {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        /* Botón de impresión oculto al imprimir */
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+
+            .document-container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+        }
+
+        .btn-print {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto 30px auto;
+            transition: 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-print:hover {
+            background-color: #9a7a49;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="btn-print no-print" onclick="window.print()">
+        🖨️ Descargar PDD en PDF (Guardar como PDF)
+    </button>
+
+    <div class="document-container">
+
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h1>Process Design Document (PDD)</h1>
+            <div class="subtitle">BrothersFilms Smart Contracts System</div>
+            <p style="color: var(--secondary); font-size: 0.9rem;">
+                <strong>Fecha:</strong> Febrero 2026 | <strong>Autor:</strong> Antigravity AI / David Verastegui |
+                <strong>Versión:</strong> 1.0
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>1. Propósito y Alcance</h3>
+            <p><strong>Proceso:</strong> Generación, firma digital y administración de contratos de Fotografía y Video
+                para Bodas y XV Años.</p>
+            <p><strong>Descripción:</strong> Documentación de la automatización y transición de un flujo de contratos
+                estáticos (Word/PDF local) a una arquitectura de Aplicación Web Descentralizada (SPA) alojada en GitHub
+                Pages, con cálculos predictivos, enlaces estado-persistentes, telemetría y generación automática de PDFs
+                firmados digitalmente.</p>
+        </div>
+
+        <h2>2. Visión del Proceso (As-Is vs To-Be)</h2>
+
+        <table style="margin-bottom: 30px;">
+            <tr>
+                <th style="width: 50%;">As-Is (Proceso Anterior)</th>
+                <th>To-Be (Proceso Automatizado)</th>
+            </tr>
+            <tr>
+                <td>
+                    <ul>
+                        <li>Interacción manual en Microsoft Word o PDF estático.</li>
+                        <li>Cálculos de abonos y saldos restantes de forma manual propensos a errores.</li>
+                        <li>Traspaso inseguro del documento por intermediarios.</li>
+                        <li>Ausencia de validación digital interactiva y notificaciones sistematizadas.</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Captura de datos en una <strong>Aplicación Web Inteligente</strong> (HTML/JS).</li>
+                        <li>El sistema calcula y valida en <strong>tiempo real</strong> los totales y saldos,
+                            desplegando alertas ("✅ PAGADO").</li>
+                        <li>Integración de Base de Datos en URL (parámetros `?`) para persistencia segura de la sesión.
+                        </li>
+                        <li>El cliente plasma su <strong>Firma Digital</strong> en pantalla táctil/mouse.</li>
+                        <li>El sistema inyecta datos al PDF y dispara correos por <strong>EmailJS</strong>
+                            automáticamente.</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        <h2>3. Diagrama de Flujo (Process Map)</h2>
+        <p>A continuación se ilustra el flujo operativo integral modelado en estilo Visio, mostrando los puntos de
+            bifurcación entre roles orgánicos (Administrador, Cliente) y sistemas automatizados (Backend JS, EmailJS).
+        </p>
+
+        <div class="diagram-container">
+            <div class="mermaid">
+                flowchart TD
+                %% Roles
+                subgraph Administrador [BrothersFilms Admin]
+                direction TB
+                A([Inicio]) --> B(Abrir web de Contratos)
+                B --> C{¿Tipo de Evento?}
+                C -->|Boda| D[Ingresar a boda.html]
+                C -->|XV Años| E[Ingresar a xv.html]
+                D --> F[Llenar Datos del Cliente]
+                E --> F
+                F --> G(Seleccionar Paquete y Extras)
+                G --> H[Capturar Inicial y Abonos]
+                H --> I{¿Finalizado?}
+                I -->|Sí| J[Boton: 'Generar Link para Cliente']
+                J --> K[Copiar URL Codificada]
+                K --> L(Enviar enlace por WhatsApp)
+                end
+
+                subgraph Capa_Autonoma [Sistema: Lógica JS]
+                direction TB
+                H -.->|Lógica de Negocio| N[Calcular Saldo a 0]
+                J -.->|Base64 Data URI| O[Codificación de URL Persistente]
+                end
+
+                subgraph Cliente [Actor: Cliente]
+                direction TB
+                L --> P(Abrir URL Compartida)
+                P --> Q[Renderizar Página en 'Modo Cliente']
+                Q --> R{Auditar Contrato}
+                R --> S[Validar Saldo Restante]
+                S --> T(Dibujar Firma Digital Canvas)
+                T --> U[Finalizar y Proceder]
+                end
+
+                subgraph Procesamiento_Salida [Integraciones (PDF / Email)]
+                direction TB
+                U -.-> V[html2canvas: Clonación del DOM]
+                V -.-> W[jsPDF: Estructuración Formato A4]
+                W -.-> X{¿El cliente ingresa correo?}
+                X -->|Sí| Y[Fetch a API EmailJS]
+                Y -.-> Z[Cliente recibe PDF y Confirmación]
+                X -->|No| AA[Descarga PDF Directa al Navegador]
+                AA --> AB([Fin Flujo])
+                Z --> AB
+                end
+
+                %% Estilos de Nodos
+                classDef admin fill:#f9f9f9,stroke:#333,stroke-width:2px;
+                classDef sys fill:#fffbe6,stroke:#faad14,stroke-width:2px;
+                classDef client fill:#f6ffed,stroke:#52c41a,stroke-width:2px;
+                classDef auto fill:#e6f7ff,stroke:#1890ff,stroke-width:2px;
+
+                class A,B,C,D,E,F,G,H,I,J,K,L admin;
+                class N,O sys;
+                class P,Q,R,S,T,U client;
+                class V,W,X,Y,Z,AA,AB auto;
+            </div>
+        </div>
+
+        <h2>4. Secuencia Detallada de Pasos</h2>
+
+        <table>
+            <tr>
+                <th>Fase</th>
+                <th>Acción del Sistema / Rol</th>
+                <th>Descripción Técnica</th>
+            </tr>
+            <tr>
+                <td><strong>1. Inicialización</strong></td>
+                <td>Administrador / UI</td>
+                <td>Rellenado de campos semánticos y selección dinámica de planes (Básico, Standard, Premium/Rock Star)
+                    controlando reglas CSS de visibilidad (`display:flex/none`).</td>
+            </tr>
+            <tr>
+                <td><strong>2. Motor Lógico</strong></td>
+                <td>Lógica JS (`updateSaldo`)</td>
+                <td>Suma interactiva de los arreglos de inputs monetarios. Si el saldo remanente es $0, inyecta
+                    distintivos verdes y bloquea deudas adicionales.</td>
+            </tr>
+            <tr>
+                <td><strong>3. Serialización</strong></td>
+                <td>Sistema (`generarLink`)</td>
+                <td>Se captura toda la entrada del DOM, incluyendo la firma del administrador extraída del Canvas a un
+                    String Base64, para armar una cadena inyectada a `URLSearchParams`.</td>
+            </tr>
+            <tr>
+                <td><strong>4. Modo Cliente</strong></td>
+                <td>Cliente / UI</td>
+                <td>Al detectar bandera `?modo=cliente` el sistema congela toda edición (readonly) garantizando
+                    integridad de datos dictada por el administrador.</td>
+            </tr>
+            <tr>
+                <td><strong>5. Consolidación Documental</strong></td>
+                <td>`html2canvas` + `jsPDF`</td>
+                <td>Se realiza un renderizado vectorial-rasterizado (`scale: 2`) del contenido visible, mapeando
+                    coordinadas a un objeto binario PDF estructurado.</td>
+            </tr>
+            <tr>
+                <td><strong>6. Notificación Mail</strong></td>
+                <td>API Externa (`EmailJS`)</td>
+                <td>Consumo de Webhook seguro hacia el proveedor para orquestar la notificación de plantillas de correo
+                    sin necesidad de microservicios backend complejos.</td>
+            </tr>
+        </table>
+
+        <h2>5. Entorno Tecnológico y Dependencias</h2>
+        <ul>
+            <li><strong>Frontend Core:</strong> HTML5 Semántico, CSS3 sin frameworks, JS Moderno (ES6+).</li>
+            <li><strong>Dependencias de Software (CDN):</strong> `html2canvas v1.4.1`, `jsPDF v2.5.1`, `@emailjs/browser
+                v4`.</li>
+            <li><strong>Despliegue de Infraestructura:</strong> Entorno Estático Distribuido mediante GitHub Pages (SSL
+                Automático).</li>
+            <li><strong>Arquitectura Funcional:</strong> Serverless & Stateless (Data-en-URL).</li>
+        </ul>
+
+    </div>
+
+    <script>
+        // Inicializar Mermaid.js
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                curve: 'linear'
+            }
+        });
+    </script>
+</body>
+
+</html>

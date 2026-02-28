@@ -1709,8 +1709,9 @@
       modales.forEach(m => m.style.display = 'none');
       if (banner) banner.style.display = 'none';
 
+      const isMobilePDF = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       const canvas = await html2canvas(wrapper, {
-        scale: 2, useCORS: true, allowTaint: true,
+        scale: isMobilePDF ? 1.2 : 2, useCORS: true, allowTaint: true,
         backgroundColor: '#f4f1eb', logging: false,
       });
 
@@ -1832,6 +1833,15 @@
     // ── DESCARGAR PDF (compatible con móvil) ──────────────────────────────────
     async function descargarPDF(btnEl) {
       const originalText = btnEl ? btnEl.textContent : '';
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      // ★ En móvil: abrir ventana INMEDIATAMENTE (dentro del gesto del usuario)
+      let winRef = null;
+      if (isMobile) {
+        winRef = window.open('about:blank', '_blank');
+        if (winRef) {
+          winRef.document.write('<html><head><title>Generando PDF...</title><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;background:#f4f1eb;margin:0"><div style="text-align:center"><p style="font-size:24px">⏳</p><p style="font-size:18px;color:#333">Generando PDF...</p><p style="font-size:14px;color:#888">Esto puede tomar unos segundos</p></div></body></html>');
+        }
+      }
       try {
         if (btnEl) {
           btnEl.textContent = '⏳ Generando PDF...';
@@ -1842,11 +1852,10 @@
         const pdfBlob = await generarPDFLocal();
         const urlPDF = URL.createObjectURL(pdfBlob);
 
-        // En móvil, window.open es más confiable que <a download>
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-          window.open(urlPDF, '_blank');
+        if (isMobile && winRef && !winRef.closed) {
+          winRef.location.href = urlPDF;
         } else {
+          // Desktop o fallback si la ventana fue bloqueada
           const a = document.createElement('a');
           a.href = urlPDF;
           a.download = fileName;
@@ -1854,10 +1863,10 @@
           a.click();
           document.body.removeChild(a);
         }
-        setTimeout(() => URL.revokeObjectURL(urlPDF), 10000);
+        setTimeout(() => URL.revokeObjectURL(urlPDF), 30000);
 
         if (btnEl) {
-          btnEl.textContent = '✅ PDF descargado';
+          btnEl.textContent = '✅ PDF listo';
           btnEl.style.background = '#1a7431';
           setTimeout(() => {
             btnEl.textContent = originalText;
@@ -1867,17 +1876,27 @@
         }
       } catch (err) {
         console.error('Error generando PDF:', err);
-        alert('⚠️ Hubo un error al generar el PDF. Intenta de nuevo.');
+        if (winRef && !winRef.closed) winRef.close();
         if (btnEl) {
           btnEl.textContent = originalText;
           btnEl.disabled = false;
         }
+        alert('⚠️ Hubo un error al generar el PDF. Intenta de nuevo.');
       }
     }
 
     // ── DESCARGAR PDF DESDE EL MODAL (cierra modal + descarga + actualiza banner) ──
     async function descargarPDFDesdeModal(btnEl) {
       const originalText = btnEl ? btnEl.textContent : '';
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      // ★ En móvil: abrir ventana INMEDIATAMENTE (dentro del gesto del usuario)
+      let winRef = null;
+      if (isMobile) {
+        winRef = window.open('about:blank', '_blank');
+        if (winRef) {
+          winRef.document.write('<html><head><title>Generando PDF...</title><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:system-ui;background:#f4f1eb;margin:0"><div style="text-align:center"><p style="font-size:24px">⏳</p><p style="font-size:18px;color:#333">Generando PDF...</p><p style="font-size:14px;color:#888">Esto puede tomar unos segundos</p></div></body></html>');
+        }
+      }
       try {
         if (btnEl) {
           btnEl.textContent = '⏳ Generando PDF...';
@@ -1891,9 +1910,8 @@
         const pdfBlob = await generarPDFLocal();
         const urlPDF = URL.createObjectURL(pdfBlob);
 
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-          window.open(urlPDF, '_blank');
+        if (isMobile && winRef && !winRef.closed) {
+          winRef.location.href = urlPDF;
         } else {
           const a = document.createElement('a');
           a.href = urlPDF;
@@ -1902,17 +1920,18 @@
           a.click();
           document.body.removeChild(a);
         }
-        setTimeout(() => URL.revokeObjectURL(urlPDF), 10000);
+        setTimeout(() => URL.revokeObjectURL(urlPDF), 30000);
 
         // Actualizar banner a estado "firmado"
         confirmSign(false);
       } catch (err) {
         console.error('Error generando PDF:', err);
-        alert('⚠️ Hubo un error al generar el PDF. Intenta de nuevo.');
+        if (winRef && !winRef.closed) winRef.close();
         if (btnEl) {
           btnEl.textContent = originalText;
           btnEl.disabled = false;
         }
+        alert('⚠️ Hubo un error al generar el PDF. Intenta de nuevo.');
       }
     }
 

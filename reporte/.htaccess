@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Acceso Restringido - BrothersFilms"
+AuthUserFile /home/username/public_html/reporte/.htpasswd
+Require valid-user

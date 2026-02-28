@@ -2,41 +2,776 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BrothersFilms - Photo & Cinema</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BrothersFilms | Fotografía y Cinematografía para Bodas y XV Años</title>
+
+    <!-- Fonts: Playfair Display for headings, Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+
     <style>
-        body {
+        /* VARIABLES GLOBALES */
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-light: #fafafa;
+            --text-main: #111111;
+            --text-light: #555555;
+            --text-white: #ffffff;
+            --text-gray: #a0a0a0;
+            --gold: #b08d57;
+            --gold-hover: #9a7848;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        /* RESTRICCIONES BÁSICAS */
+        * {
             margin: 0;
             padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: #1a1a1a;
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-main);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* BOTONES */
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
             text-align: center;
         }
 
-        h1 {
-            font-size: 2.5rem;
+        .btn-gold {
+            background-color: var(--gold);
+            color: var(--text-white);
+            border: 1px solid var(--gold);
+        }
+
+        .btn-gold:hover {
+            background-color: var(--gold-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-white);
+            border: 1px solid var(--text-white);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--text-white);
+            color: var(--bg-dark);
+        }
+
+        .btn-outline-dark {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--text-main);
+        }
+
+        .btn-outline-dark:hover {
+            background-color: var(--text-main);
+            color: var(--text-white);
+        }
+
+        /* BARRA DE NAVEGACIÓN */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-white);
+            letter-spacing: 1px;
+        }
+
+        .logo img {
+            height: 40px;
+            /* Para cuando pongas tu PNG */
+            filter: brightness(0) invert(1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links li a {
+            color: var(--text-white);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .nav-links li a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            /* En móvil se ocultan para diseño limpio */
+        }
+
+        /* SECTION 1: HERO */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop') center/cover no-repeat;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.6);
+            /* Overlay oscuro */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 20px;
+            color: var(--text-white);
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(36px, 5vw, 64px);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: clamp(16px, 2vw, 18px);
+            color: #e0e0e0;
+            font-weight: 300;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* SECTION 2: TESTIMONIALS (SOCIAL PROOF) */
+        .testimonials {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .testimonials h3 {
+            font-family: var(--font-body);
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 40px;
+        }
+
+        .test-grid {
+            display: flex;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .test-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        .test-card {
+            flex: 0 0 calc(33.333% - 20px);
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            text-align: left;
+            scroll-snap-align: center;
+        }
+
+        .test-card p.quote {
+            font-family: var(--font-heading);
+            font-size: 16px;
+            font-style: italic;
+            color: #dfdfdf;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .test-card p.author {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* SECTION 3: SERVICES / PORTFOLIO */
+        .services {
+            padding: 100px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(32px, 4vw, 42px);
+            color: var(--text-main);
+            font-weight: 400;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            text-align: left;
+            group: relative;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-img {
+            transform: scale(1.02);
+        }
+
+        .card h3 {
+            font-family: var(--font-heading);
+            font-size: 24px;
             margin-bottom: 10px;
         }
 
-        p {
-            color: #aaaaaa;
-            font-size: 1.2rem;
+        .card p {
+            color: var(--text-light);
+            font-size: 15px;
+            margin-bottom: 20px;
+            min-height: 60px;
+        }
+
+        .card-link {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .card-link:hover {
+            color: var(--text-main);
+        }
+
+        .card-link::after {
+            content: '→';
+            margin-left: 5px;
+            transition: transform 0.3s;
+        }
+
+        .card:hover .card-link::after {
+            transform: translateX(5px);
+        }
+
+        /* SECTION 4: PROCESS */
+        .process {
+            background-color: #f0f0f0;
+            padding: 100px 5%;
+        }
+
+        .process-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .step {
+            position: relative;
+        }
+
+        .step-num {
+            font-family: var(--font-heading);
+            font-size: 48px;
+            color: var(--gold);
+            opacity: 0.5;
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+
+        .step h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        /* SECTION 5: INVESTMENT */
+        .investment {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .inv-image {
+            flex: 1 1 50%;
+            min-height: 500px;
+            background: url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop') center/cover;
+        }
+
+        .inv-content {
+            flex: 1 1 50%;
+            padding: 100px 8%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+        }
+
+        .inv-content h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(32px, 4vw, 42px);
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .inv-content p {
+            color: #ccc;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .inv-price {
+            font-size: 18px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--gold);
+            padding-left: 15px;
+        }
+
+        /* SECTION 6: FAQ */
+        .faq-section {
+            padding: 100px 5%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+        }
+
+        .faq-q {
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-q:hover {
+            color: var(--gold);
+        }
+
+        .faq-a {
+            margin-top: 15px;
+            color: var(--text-light);
+            font-size: 15px;
+            display: none;
+            /* simple display toggle via JS */
+            line-height: 1.6;
+        }
+
+        .faq-item.active .faq-a {
+            display: block;
+        }
+
+        .faq-item.active .faq-q {
+            color: var(--gold);
+        }
+
+        /* FOOTER / CONTACT CTA */
+        .footer-cta {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            text-align: center;
+            padding: 100px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-cta h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(32px, 4vw, 42px);
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .footer-cta p {
+            color: #aaa;
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer-bottom {
+            margin-top: 60px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* WHATSAPP FLOAT */
+        .whatsapp-float {
+            position: fixed;
+            width: 55px;
+            height: 55px;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 28px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        .whatsapp-float svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        @media (max-width: 768px) {
+            .inv-image {
+                min-height: 300px;
+            }
+
+            .inv-content {
+                padding: 60px 20px;
+            }
+
+            .test-grid {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+
+            .test-card {
+                flex: 0 0 85%;
+            }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <h1>BROTHER'S FILMS</h1>
-    <p>PHOTO & CINEMA</p>
-    <p style="margin-top: 30px; font-size: 1rem;">Nuestra nueva web está en construcción. ¡Próximamente!</p>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">BrothersFilms</div>
+        <!-- Si tienes tu logo PNG, descomenta esto y ajusta la ruta: -->
+        <!-- <div class="logo"><img src="ruta/a/tu/logo-blanco.png" alt="BrothersFilms"></div> -->
+
+        <ul class="nav-links">
+            <li><a href="#portafolio">Portafolio</a></li>
+            <li><a href="#experiencia">Experiencia</a></li>
+            <li><a href="#inversion">Inversión</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <a href="https://wa.me/528442258873?text=Hola%20BrothersFilms,%20me%20gustaría%20saber%20si%20tienen%20disponibilidad%20para%20mi%20fecha."
+            class="btn btn-outline" target="_blank">Consultar Fecha</a>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Visuales Cinematográficos para las Obras Maestras de la Vida.</h1>
+            <p>Fotografía de alto nivel y cinematografía editorial para Bodas y XV Años en Saltillo y destinos foráneos.
+            </p>
+            <div class="hero-buttons">
+                <a href="https://wa.me/528442258873?text=Hola,%20me%20gustaría%20cotizar%20mi%20evento."
+                    class="btn btn-gold" target="_blank">Verificar Disponibilidad</a>
+                <a href="#portafolio" class="btn btn-outline">Ver Nuestro Trabajo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials">
+        <h3>Confiado por parejas y familias en Saltillo</h3>
+        <div class="test-grid">
+            <div class="test-card">
+                <p class="quote">"La verdad se lucieron, nos gustó muchísimo todo, superaron nuestras expectativas.
+                    Estuvieron excelentes en tiempo, calidad de las fotos woow y la atención. ¡Mil gracias!"</p>
+                <p class="author">— Estefania & Francisco</p>
+            </div>
+            <div class="test-card">
+                <p class="quote">"Son un gran equipo, mi esposo y yo confiamos 100% en ellos... Nuestros invitados los
+                    felicitaron por el gran trabajo que realizan, además en el evento siempre estuvieron presentes."</p>
+                <p class="author">— Fernanda & Carlos</p>
+            </div>
+            <div class="test-card">
+                <p class="quote">"Súper atentos y profesionales todo el evento. A pesar de que el evento fue muy largo
+                    siempre estuvieron amables, tomando en cuenta cada detalle. Resultados hermosos."</p>
+                <p class="author">— Michelle & Eder</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO / SERVICES -->
+    <section class="services" id="portafolio">
+        <div class="section-header">
+            <h2>Narrativa Cinematográfica</h2>
+            <p>Creamos películas editoriales y fotografía atemporal adaptadas a la energía única de tu celebración.</p>
+        </div>
+        <div class="grid">
+            <!-- Boda -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format&fit=crop"
+                    alt="Bodas" class="card-img">
+                <h3>Bodas y Destino</h3>
+                <p>Documentando la emoción cruda y los detalles sofisticados de tu legado. Desde la tranquila mañana de
+                    maquillaje hasta el último baile.</p>
+                <a href="https://wa.me/528442258873?text=Me%20interesa%20información%20para%20Boda" class="card-link"
+                    target="_blank">Cotizar Boda</a>
+            </div>
+            <!-- XV Años -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1549685368-2d8ebad57ab9?q=80&w=1956&auto=format&fit=crop"
+                    alt="XV Años" class="card-img">
+                <h3>Quinceañeras</h3>
+                <p>Cobertura cinematográfica llena de energía que captura su personalidad única, la moda y la
+                    celebración familiar que merece.</p>
+                <a href="https://wa.me/528442258873?text=Me%20interesa%20información%20para%20XV%20Años"
+                    class="card-link" target="_blank">Cotizar XV Años</a>
+            </div>
+            <!-- Pre-Session -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?q=80&w=2070&auto=format&fit=crop"
+                    alt="Sesión Previa" class="card-img">
+                <h3>Sesiones Previas (Save the Date)</h3>
+                <p>Sesiones exclusivas y dirigidas, diseñadas para generar confianza frente a la cámara antes del evento
+                    principal.</p>
+                <a href="https://wa.me/528442258873?text=Me%20interesa%20una%20sesión%20casual" class="card-link"
+                    target="_blank">Explorar Sesiones</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="process" id="experiencia">
+        <div class="process-container">
+            <div class="section-header" style="text-align: left;">
+                <h2>Una Experiencia Guiada y Premium</h2>
+                <p>Combinamos visión cinematográfica con una ejecución impecable para que realmente disfrutes tu
+                    celebración sin preocuparte por las cámaras.</p>
+            </div>
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-num">01</div>
+                    <h4>La Consulta</h4>
+                    <p>Conectamos para entender tu visión, bloqueamos tu fecha y aseguramos tu contrato de manera 100%
+                        digital y transparente.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">02</div>
+                    <h4>Pre-Producción</h4>
+                    <p>Trazamos los tiempos y realizamos la sesión previa exclusiva para asegurar que te sientas natural
+                        frente a nuestra lente.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">03</div>
+                    <h4>Tu Gran Día</h4>
+                    <p>Cobertura editorial discreta pero alerta, utilizando equipo de alta gama e iluminación asistida
+                        para cada ángulo.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">04</div>
+                    <h4>El Legado</h4>
+                    <p>Revive tu día a través de una galería online privada y obras físicas, entregadas puntualmente en
+                        el tiempo prometido.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INVESTMENT -->
+    <section class="investment" id="inversion">
+        <div class="inv-image"></div>
+        <div class="inv-content">
+            <h2>Tu legado, preservado por expertos.</h2>
+            <p>Ofrecemos colecciones integrales de Foto y Video que incluyen cobertura total, highlights
+                cinematográficos con tomas de dron y material físico invaluable. Porque la paz mental el día de tu
+                evento no tiene precio.</p>
+
+            <div class="inv-price">
+                <strong>Colecciones de Bodas</strong> inician desde $19,500 MXN.
+            </div>
+            <div class="inv-price" style="margin-bottom: 40px;">
+                <strong>Colecciones de XV Años</strong> inician desde $19,500 MXN.
+            </div>
+
+            <div>
+                <a href="https://wa.me/528442258873?text=Hola,%20quisiera%20solicitar%20la%20guía%20de%20inversión%20y%20paquetes."
+                    class="btn btn-gold" target="_blank">Solicitar Guía de Precios Completa</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" id="faq">
+        <div class="section-header">
+            <h2>Preguntas Frecuentes</h2>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-q">¿Viajan fuera de Saltillo para cubrir eventos? <span>+</span></div>
+                <div class="faq-a">¡Sí! Nos encantan los eventos de destino. Los viáticos y tarifas de viaje se calculan
+                    de manera personalizada según la ubicación de tu evento.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-q">¿Cuánto tiempo tardan en entregar las fotos y el video? <span>+</span></div>
+                <div class="faq-a">Nos enorgullecemos de nuestra formalidad. Tu galería digital completa y los videos
+                    cinematográficos se entregan en un plazo máximo de 3 meses.</div>
+            </div>
+            <div class="faq-item" onclick="this.classList.toggle('active')">
+                <div class="faq-q">¿Necesitamos saber posar? <span>+</span></div>
+                <div class="faq-a">Para nada. Nos especializamos en dirección natural; te guiaremos sutilmente para que
+                    luzcas increíble sintiéndote 100% tú mismo, capturando emociones reales.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER CTA -->
+    <footer class="footer-cta">
+        <h2>Creemos algo hermoso juntos.</h2>
+        <p>Las fechas se reservan con 6 a 12 meses de anticipación. Contáctanos hoy para asegurar que tu día quede
+            inmortalizado de forma espectacular.</p>
+        <a href="https://wa.me/528442258873?text=Hola,%20me%20gustaría%20agendar%20una%20llamada/cita%20con%20BrothersFilms."
+            class="btn btn-gold" target="_blank" style="font-size: 16px; padding: 18px 36px;">Contactar por WhatsApp</a>
+        <p style="margin-top: 20px; font-size: 13px; color: #777;">🔒 Respetamos tu privacidad. Recibirás respuesta
+            usualmente en menos de 6 horas.</p>
+
+        <div class="footer-bottom">
+            &copy;
+            <script>document.write(new Date().getFullYear())</script> BrothersFilms Saltillo. Todos los derechos
+            reservados.
+        </div>
+    </footer>
+
+    <!-- WHATSAPP FLOATING BUTTON -->
+    <a href="https://wa.me/528442258873?text=Hola,%20vengo%20de%20su%20sitio%20web%20y%20me%20gustaría%20información."
+        class="whatsapp-float" target="_blank" aria-label="WhatsApp Contact">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+                d="M12.031 0C5.385 0 0 5.387 0 12.035c0 2.126.554 4.204 1.604 6.035L.037 24l6.096-1.598A11.96 11.96 0 0012.031 24c6.645 0 12.031-5.386 12.031-12.035C24.062 5.385 18.675 0 12.031 0zm.006 22.016c-1.8 0-3.565-.483-5.118-1.405l-.367-.217-3.804.997 1.018-3.708-.238-.38a9.982 9.982 0 01-1.526-5.332c0-5.522 4.492-10.016 10.012-10.016 5.518 0 10.01 4.494 10.01 10.016 0 5.524-4.492 10.016-10.01 10.016zm5.495-7.508c-.301-.151-1.782-.88-2.058-.98-.276-.1-.477-.15-.678.151-.202.301-.78 1.054-.954 1.255-.176.2-.352.226-.653.076-2.083-1.042-3.411-2.091-4.706-4.29-.126-.201-.014-.309.136-.46.136-.135.301-.35.452-.526.151-.176.202-.301.302-.502.101-.2.05-.376-.025-.526-.076-.151-.678-1.631-.93-2.234-.246-.588-.495-.508-.678-.518-.175-.008-.376-.01-.577-.01-.2 0-.527.075-.802.376-.276.301-1.055 1.03-1.055 2.51 0 1.48 1.08 2.91 1.23 3.111.151.201 2.119 3.235 5.138 4.539 2.016.87 2.417.804 2.868.753.452-.05 1.455-.593 1.656-1.168.201-.575.201-1.065.141-1.166-.06-.1-.261-.15-.562-.301z" />
+        </svg>
+    </a>
+
 </body>
 
 </html>

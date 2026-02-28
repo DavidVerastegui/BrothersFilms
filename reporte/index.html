@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BrothersFilms – Reporte de Eventos 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="events_data.js"></script>
+    <style>
+        :root {
+            --bg: #0b0f19;
+            --surface: #131929;
+            --surface2: #1c2440;
+            --surface3: #222d4e;
+            --accent: #6c63ff;
+            --accent2: #ff6584;
+            --accent3: #43e97b;
+            --accent4: #f7971e;
+            --text: #e8eaf6;
+            --muted: #8892b0;
+            --border: rgba(108, 99, 255, 0.18);
+            --card-radius: 18px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: linear-gradient(135deg, #1a1040 0%, #0b0f19 60%);
+            border-bottom: 1px solid var(--border);
+            padding: 28px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-area h1 {
+            font-size: 1.9rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #6c63ff, #ff6584);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-area p {
+            color: var(--muted);
+            font-size: 0.84rem;
+            margin-top: 3px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-select {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.18s, transform 0.15s;
+        }
+
+        .btn:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c63ff, #8b80ff);
+            color: #fff;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .btn-outline:hover {
+            border-color: #6c63ff;
+            color: #a89bff;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff4d6d, #ff6584);
+            color: #fff;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+            color: #0b0f19;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: 8px;
+        }
+
+        /* ── MAIN ── */
+        main {
+            padding: 32px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        /* ── KPI CARDS ── */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        .kpi-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--card-radius);
+            padding: 22px 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(108, 99, 255, .15);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .kpi-card.c1::before {
+            background: linear-gradient(90deg, #6c63ff, #8b80ff);
+        }
+
+        .kpi-card.c2::before {
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+        }
+
+        .kpi-card.c3::before {
+            background: linear-gradient(90deg, #ff6584, #ff8fa3);
+        }
+
+        .kpi-card.c4::before {
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+        }
+
+        .kpi-card.c5::before {
+            background: linear-gradient(90deg, #f7971e, #ffd200);
+        }
+
+        .kpi-card.c6::before {
+            background: linear-gradient(90deg, #ff4d6d, #ff6584);
+        }
+
+        .kpi-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .kpi-label {
+            font-size: 0.72rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .kpi-value {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-top: 4px;
+            line-height: 1;
+        }
+
+        .c1 .kpi-value {
+            color: #a89bff;
+        }
+
+        .c2 .kpi-value {
+            color: #4facfe;
+        }
+
+        .c3 .kpi-value {
+            color: #ff8fa3;
+        }
+
+        .c4 .kpi-value {
+            color: #43e97b;
+        }
+
+        .c5 .kpi-value {
+            color: #ffd200;
+        }
+
+        .c6 .kpi-value {
+            color: #ff6584;
+        }
+
+        .kpi-sub {
+            font-size: 0.74rem;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        /* ── CHARTS ── */
+        .charts-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+            margin-bottom: 36px;
+        }
+
+        @media(max-width:860px) {
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--card-radius);
+            padding: 24px;
+        }
+
+        .chart-card h3 {
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        /* ── TABLE SECTION ── */
+        .table-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 6px 15px;
+            font-size: 0.78rem;
+            color: var(--muted);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            transition: all 0.18s;
+        }
+
+        .filter-tab.active,
+        .filter-tab:hover {
+            background: rgba(108, 99, 255, .18);
+            border-color: #6c63ff;
+            color: #a89bff;
+        }
+
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--card-radius);
+            overflow-x: auto;
+            margin-bottom: 36px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        thead th {
+            background: var(--surface2);
+            color: var(--muted);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 13px 14px;
+            text-align: left;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background .15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(108, 99, 255, .06);
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody td {
+            padding: 12px 14px;
+            font-size: 0.83rem;
+            white-space: nowrap;
+        }
+
+        .event-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 50px;
+            padding: 3px 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .badge-boda {
+            background: rgba(108, 99, 255, .18);
+            border: 1px solid rgba(108, 99, 255, .3);
+            color: #a89bff;
+        }
+
+        .badge-xv {
+            background: rgba(255, 101, 132, .18);
+            border: 1px solid rgba(255, 101, 132, .3);
+            color: #ff8fa3;
+        }
+
+        .badge-otro {
+            background: rgba(247, 151, 30, .18);
+            border: 1px solid rgba(247, 151, 30, .3);
+            color: #ffd200;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 50px;
+            padding: 4px 11px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .status-paid {
+            background: rgba(67, 233, 123, .12);
+            color: #43e97b;
+            border: 1px solid rgba(67, 233, 123, .3);
+        }
+
+        .status-partial {
+            background: rgba(247, 151, 30, .12);
+            color: #ffd200;
+            border: 1px solid rgba(247, 151, 30, .3);
+        }
+
+        .status-none {
+            background: rgba(255, 77, 109, .12);
+            color: #ff8fa3;
+            border: 1px solid rgba(255, 77, 109, .3);
+        }
+
+        .amount {
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .amt-green {
+            color: #43e97b;
+        }
+
+        .amt-red {
+            color: #ff6584;
+        }
+
+        .amt-muted {
+            color: var(--muted);
+        }
+
+        .month-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: #4facfe;
+        }
+
+        .bar-wrap {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 5px;
+            background: var(--surface2);
+            border-radius: 10px;
+            overflow: hidden;
+            min-width: 50px;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #43e97b, #38f9d7);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        /* ── MONTH SUMMARY ── */
+        .months-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+            gap: 13px;
+            margin-bottom: 36px;
+        }
+
+        .month-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            transition: transform .2s;
+        }
+
+        .month-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .month-card .m-name {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .month-card .m-count {
+            font-size: 1.9rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-top: 6px;
+        }
+
+        .month-card .m-list {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 0.73rem;
+            color: var(--muted);
+        }
+
+        /* ── MODAL OVERLAY ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .72);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 34px 36px;
+            width: 100%;
+            max-width: 620px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp .22s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            background: linear-gradient(90deg, #6c63ff, #ff6584);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media(max-width:500px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .8px;
+        }
+
+        input,
+        select,
+        textarea {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #6c63ff;
+        }
+
+        select option {
+            background: var(--surface2);
+        }
+
+        .abonos-section {
+            grid-column: 1/-1;
+        }
+
+        .abonos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 26px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #6c63ff, #8b80ff);
+            color: #fff;
+            border-radius: 50px;
+            padding: 12px 28px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity .3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* ── DELETE CONFIRM ── */
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .72);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirm-overlay.open {
+            display: flex;
+        }
+
+        .confirm-box {
+            background: var(--surface);
+            border: 1px solid rgba(255, 77, 109, .3);
+            border-radius: 18px;
+            padding: 30px 34px;
+            text-align: center;
+            max-width: 360px;
+            animation: slideUp .2s ease;
+        }
+
+        .confirm-box .ci {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .confirm-box h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .confirm-box p {
+            color: var(--muted);
+            font-size: 0.84rem;
+            margin-bottom: 22px;
+        }
+
+        .confirm-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        /* ── SAVE INDICATOR ── */
+        .save-indicator {
+            font-size: 0.75rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .save-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #43e97b;
+        }
+
+        @media print {
+
+            .btn,
+            .action-btns,
+            .modal-overlay,
+            .confirm-overlay,
+            .toast {
+                display: none !important;
+            }
+        }
+
+        @media(max-width:700px) {
+            main {
+                padding: 20px;
+            }
+
+            header {
+                padding: 20px;
+            }
+        }
+
+        /* ── DUPLICATE ALERT ── */
+        .alert-box {
+            background: rgba(255, 77, 109, 0.12);
+            border: 1px solid rgba(255, 77, 109, 0.35);
+            color: #ff8fa3;
+            padding: 18px 24px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            display: none;
+            align-items: flex-start;
+            gap: 16px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .alert-box.show {
+            display: flex;
+        }
+
+        .alert-icon {
+            font-size: 1.6rem;
+        }
+
+        .alert-content h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ff6584;
+            margin-bottom: 6px;
+        }
+
+        .alert-content p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .alert-content ul {
+            font-size: 0.82rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 10px 14px 10px 30px;
+            list-style-type: circle;
+        }
+
+        .alert-content li {
+            margin-bottom: 4px;
+        }
+
+        .alert-content li:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- MODAL: AGREGAR / EDITAR EVENTO -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModalIfOutside(event)">
+        <div class="modal">
+            <div class="modal-title" id="modal-title">➕ Nuevo Evento</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nombre del Cliente *</label>
+                    <input type="text" id="f-cliente" placeholder="Ej. Juan & María" required />
+                </div>
+                <div class="form-group">
+                    <label>Tipo de Evento *</label>
+                    <select id="f-tipo">
+                        <option value="BODA">💍 Boda</option>
+                        <option value="XV">👑 XV Años</option>
+                        <option value="OTRO">🎉 Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Fecha *</label>
+                    <input type="date" id="f-fecha" />
+                </div>
+                <div class="form-group">
+                    <label>Mes</label>
+                    <select id="f-mes">
+                        <option>Enero</option>
+                        <option>Febrero</option>
+                        <option>Marzo</option>
+                        <option>Abril</option>
+                        <option>Mayo</option>
+                        <option>Junio</option>
+                        <option>Julio</option>
+                        <option>Agosto</option>
+                        <option>Septiembre</option>
+                        <option>Octubre</option>
+                        <option>Noviembre</option>
+                        <option>Diciembre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ubicación</label>
+                    <input type="text" id="f-ubicacion" placeholder="Ej. Samilta" />
+                </div>
+                <div class="form-group">
+                    <label>Servicio / Salón</label>
+                    <input type="text" id="f-servicio" placeholder="Ej. Mercury" />
+                </div>
+                <div class="form-group full">
+                    <label>Total del Contrato ($) *</label>
+                    <input type="number" id="f-contrato" placeholder="22511" step="0.01" min="0" />
+                </div>
+
+                <div class="abonos-section">
+                    <label>💸 Abonos Recibidos</label>
+                    <div class="abonos-grid">
+                        <div class="form-group">
+                            <label>Abono 1</label>
+                            <input type="number" id="f-a1" placeholder="0" step="0.01" min="0" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Abono 2</label>
+                            <input type="number" id="f-a2" placeholder="0" step="0.01" min="0" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Abono 3</label>
+                            <input type="number" id="f-a3" placeholder="0" step="0.01" min="0" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Abono 4</label>
+                            <input type="number" id="f-a4" placeholder="0" step="0.01" min="0" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Abono 5</label>
+                            <input type="number" id="f-a5" placeholder="0" step="0.01" min="0" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Abono 6</label>
+                            <input type="number" id="f-a6" placeholder="0" step="0.01" min="0" value="0" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group full"
+                    style="background:var(--surface2);border-radius:12px;padding:14px 16px;border:1px solid var(--border);">
+                    <div style="display:flex;justify-content:space-between;font-size:0.83rem;">
+                        <span style="color:var(--muted);">Total Abonado:</span>
+                        <strong id="preview-abonado" style="color:#43e97b;">$0.00</strong>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.83rem;margin-top:6px;">
+                        <span style="color:var(--muted);">Saldo Pendiente:</span>
+                        <strong id="preview-pendiente" style="color:#ff6584;">$0.00</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-primary" id="modal-save-btn" onclick="saveEvento()">💾 Guardar Evento</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRM DELETE -->
+    <div class="confirm-overlay" id="confirm-overlay">
+        <div class="confirm-box">
+            <div class="ci">🗑️</div>
+            <h3>¿Eliminar evento?</h3>
+            <p>Esta acción no se puede deshacer. El evento será eliminado permanentemente.</p>
+            <div class="confirm-actions">
+                <button class="btn btn-outline" onclick="closeConfirm()">Cancelar</button>
+                <button class="btn btn-danger" id="confirm-delete-btn">Sí, eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo-area">
+            <h1>🎬 BrothersFilms</h1>
+            <p>Reporte de Eventos (Sincronizado con Excel)</p>
+        </div>
+        <div class="header-actions">
+            <select id="global-year-filter" onchange="applyGlobalFilters()" class="filter-select">
+                <option value="ALL">Todos los Años</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025" selected>2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+            </select>
+            <select id="global-month-filter" onchange="applyGlobalFilters()" class="filter-select">
+                <option value="ALL">Todos los Meses</option>
+                <option value="Enero">Enero</option>
+                <option value="Febrero">Febrero</option>
+                <option value="Marzo">Marzo</option>
+                <option value="Abril">Abril</option>
+                <option value="Mayo">Mayo</option>
+                <option value="Junio">Junio</option>
+                <option value="Julio">Julio</option>
+                <option value="Agosto">Agosto</option>
+                <option value="Septiembre">Septiembre</option>
+                <option value="Octubre">Octubre</option>
+                <option value="Noviembre">Noviembre</option>
+                <option value="Diciembre">Diciembre</option>
+            </select>
+            <button class="btn btn-outline" onclick="exportarExcel()">📥 Descargar Excel</button>
+            <button class="btn btn-primary" onclick="openModal()">✚ Nuevo Evento</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- DUPLICATE ALERT -->
+        <div class="alert-box" id="duplicate-alert">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-content">
+                <h3>Conflicto de Fechas Detectado</h3>
+                <p>Atención: Se han encontrado días con múltiples eventos programados. Verifica la disponibilidad.</p>
+                <ul id="duplicate-list"></ul>
+            </div>
+        </div>
+
+        <!-- KPI -->
+        <div class="section-title">📊 Resumen General</div>
+        <div class="kpi-grid">
+            <div class="kpi-card c1">
+                <div class="kpi-icon">📋</div>
+                <div class="kpi-label">Total Eventos</div>
+                <div class="kpi-value" id="k-total">–</div>
+                <div class="kpi-sub">Contratos firmados</div>
+            </div>
+            <div class="kpi-card c2">
+                <div class="kpi-icon">💍</div>
+                <div class="kpi-label">Bodas</div>
+                <div class="kpi-value" id="k-bodas">–</div>
+                <div class="kpi-sub">Eventos de boda</div>
+            </div>
+            <div class="kpi-card c3">
+                <div class="kpi-icon">👑</div>
+                <div class="kpi-label">XV Años</div>
+                <div class="kpi-value" id="k-xv">–</div>
+                <div class="kpi-sub">Quinceañeras</div>
+            </div>
+            <div class="kpi-card c4">
+                <div class="kpi-icon">💵</div>
+                <div class="kpi-label">Total Contratado</div>
+                <div class="kpi-value" id="k-contratado">–</div>
+                <div class="kpi-sub">Suma de contratos</div>
+            </div>
+            <div class="kpi-card c5">
+                <div class="kpi-icon">✅</div>
+                <div class="kpi-label">Total Abonado</div>
+                <div class="kpi-value" id="k-abonado">–</div>
+                <div class="kpi-sub">Pagos recibidos</div>
+            </div>
+            <div class="kpi-card c6">
+                <div class="kpi-icon">⏳</div>
+                <div class="kpi-label">Por Cobrar</div>
+                <div class="kpi-value" id="k-pendiente">–</div>
+                <div class="kpi-sub">Saldo pendiente</div>
+            </div>
+        </div>
+
+        <!-- CHARTS -->
+        <div class="charts-row">
+            <div class="chart-card">
+                <h3>🎭 Tipos de Evento</h3>
+                <canvas id="donutChart" height="200"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>📆 Eventos por Año</h3>
+                <canvas id="yearChart" height="200"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>📅 Eventos por Mes</h3>
+                <canvas id="barChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- MONTHS -->
+        <div class="section-title">📆 Desglose por Mes</div>
+        <div class="months-grid" id="months-grid"></div>
+
+        <!-- TABLE -->
+        <div class="table-header-bar">
+            <div class="section-title" style="margin-bottom:0;">📝 Todos los Eventos</div>
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" onclick="filterTable('TODOS',this)">Todos</button>
+                    <button class="filter-tab" onclick="filterTable('BODA',this)">💍 Bodas</button>
+                    <button class="filter-tab" onclick="filterTable('XV',this)">👑 XV Años</button>
+                    <button class="filter-tab" onclick="filterTable('PENDIENTE',this)">⏳ Con Saldo</button>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="openModal()">✚ Agregar Evento</button>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cliente</th>
+                        <th>Tipo</th>
+                        <th>Fecha / Mes</th>
+                        <th>Ubicación</th>
+                        <th>Total Contrato</th>
+                        <th>Total Abonado</th>
+                        <th>Saldo Pendiente</th>
+                        <th>Pago</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+
+        <!-- FINANCIAL SUMMARY BY YEAR -->
+        <div class="section-title">💵 Resumen Financiero por Año</div>
+        <div class="months-grid" id="year-fin-grid" style="margin-bottom: 36px;"></div>
+
+        <!-- FINANCIAL SUMMARY BY MONTH -->
+        <div class="section-title">💵 Resumen Financiero por Mes</div>
+        <div class="months-grid" id="fin-grid"></div>
+    </main>
+
+    <script>
+        // ─────────────────────────────── DATA LAYER ──────────────────────────────────
+        const STORAGE_KEY = 'bf_eventos_v3';
+        const MONTH_ORDER = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const MONTH_COLORS = {
+            'Enero': '#6c63ff', 'Febrero': '#ff6584', 'Marzo': '#43e97b',
+            'Abril': '#6c63ff', 'Mayo': '#f7971e', 'Junio': '#43e97b',
+            'Julio': '#4facfe', 'Agosto': '#ff6584', 'Septiembre': '#a89bff',
+            'Octubre': '#ffd200', 'Noviembre': '#f7971e', 'Diciembre': '#38f9d7'
+        };
+
+        let todosLosEventos = [];
+        let eventos = [];
+        let nextId = 1000;
+        let currentFilter = 'TODOS';
+        let editingId = null;
+        let deletingId = null;
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            let rawData = typeof EXCEL_DATA !== 'undefined' ? EXCEL_DATA : [];
+
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    // Use saved if valid, otherwise fallback
+                    if (parsed.todosLosEventos && parsed.todosLosEventos.length > 0) {
+                        rawData = parsed.todosLosEventos;
+                        nextId = parsed.nextId || 1000;
+                    }
+                } catch { }
+            }
+
+            todosLosEventos = rawData;
+            todosLosEventos.forEach(e => {
+                e.totalAbonado = (e.abonos || [0, 0, 0, 0, 0, 0, 0]).reduce((a, b) => a + b, 0);
+                e.pendiente = e.contrato - e.totalAbonado;
+                e.pct = e.contrato > 0 ? Math.min(100, Math.round((e.totalAbonado / e.contrato) * 100)) : 0;
+                e.estado = e.contrato > 0 && e.pendiente <= 0 ? 'PAGADO' : e.totalAbonado > 0 ? 'PARCIAL' : 'PENDIENTE';
+                e.year = e.fecha ? e.fecha.split('-')[0] : '';
+            });
+
+            applyGlobalFilters();
+        }
+
+        window.applyGlobalFilters = function () {
+            const year = document.getElementById('global-year-filter').value;
+            const month = document.getElementById('global-month-filter').value;
+
+            eventos = todosLosEventos.filter(e => {
+                const matchYear = year === 'ALL' || e.year === year;
+                const matchMonth = month === 'ALL' || e.mes === month;
+                return matchYear && matchMonth;
+            });
+            renderAll();
+        };
+
+        function saveData() {
+            // Recompute before saving to ensure totals are fresh
+            todosLosEventos.forEach(e => {
+                e.totalAbonado = (e.abonos || [0, 0, 0, 0, 0, 0, 0]).reduce((a, b) => a + b, 0);
+                e.pendiente = e.contrato - e.totalAbonado;
+                e.pct = e.contrato > 0 ? Math.min(100, Math.round((e.totalAbonado / e.contrato) * 100)) : 0;
+                e.estado = e.contrato > 0 && e.pendiente <= 0 ? 'PAGADO' : e.totalAbonado > 0 ? 'PARCIAL' : 'PENDIENTE';
+                e.year = e.fecha ? e.fecha.split('-')[0] : '';
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({ todosLosEventos, nextId }));
+        }
+
+        function resetData() {
+            if (!confirm('¿Restaurar a los datos originales de Excel? Se perderán los cambios locales extras.')) return;
+            localStorage.removeItem(STORAGE_KEY);
+
+            // Clear current memory completely to force using EXCEL_DATA
+            todosLosEventos = typeof EXCEL_DATA !== 'undefined' ? JSON.parse(JSON.stringify(EXCEL_DATA)) : [];
+            nextId = 1000;
+
+            loadData();
+            showToast('✅ Datos restaurados al original de Excel');
+        }
+
+        // ─────────────────────────────── FORMAT ──────────────────────────────────────
+        const fmt = n => '$' + n.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        // ─────────────────────────────── CHARTS ──────────────────────────────────────
+        let donutChart, barChart, yearChart;
+
+        function buildCharts() {
+            const dCtx = document.getElementById('donutChart').getContext('2d');
+            donutChart = new Chart(dCtx, {
+                type: 'doughnut',
+                data: { labels: ['Bodas', 'XV Años', 'Otro'], datasets: [{ data: [0, 0, 0], backgroundColor: ['#6c63ff', '#ff6584', '#f7971e'], borderWidth: 0, hoverOffset: 6 }] },
+                options: { cutout: '68%', plugins: { legend: { position: 'bottom', labels: { color: '#8892b0', font: { size: 12, family: 'Inter' }, padding: 14 } } } }
+            });
+            const bCtx = document.getElementById('barChart').getContext('2d');
+            barChart = new Chart(bCtx, {
+                type: 'bar',
+                data: { labels: MONTH_ORDER, datasets: [{ label: 'Eventos', data: new Array(12).fill(0), backgroundColor: MONTH_ORDER.map(m => MONTH_COLORS[m] || '#6c63ff'), borderRadius: 8, borderSkipped: false }] },
+                options: {
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#8892b0', font: { family: 'Inter' } }, grid: { color: '#1c2440' } },
+                        y: { beginAtZero: true, ticks: { color: '#8892b0', stepSize: 1, font: { family: 'Inter' } }, grid: { color: '#1c2440' } }
+                    }
+                }
+            });
+            const yCtx = document.getElementById('yearChart').getContext('2d');
+            yearChart = new Chart(yCtx, {
+                type: 'bar',
+                data: { labels: [], datasets: [{ label: 'Eventos', data: [], backgroundColor: '#f7971e', borderRadius: 8 }] },
+                options: {
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#8892b0', font: { family: 'Inter' } }, grid: { color: '#1c2440' } },
+                        y: { beginAtZero: true, ticks: { color: '#8892b0', stepSize: 1, font: { family: 'Inter' } }, grid: { color: '#1c2440' } }
+                    }
+                }
+            });
+        }
+
+        function updateCharts() {
+            const bodas = eventos.filter(e => e.tipo === 'BODA').length;
+            const xvs = eventos.filter(e => e.tipo === 'XV').length;
+            const otro = eventos.filter(e => e.tipo !== 'BODA' && e.tipo !== 'XV').length;
+            donutChart.data.datasets[0].data = [bodas, xvs, otro];
+            donutChart.update();
+
+            const counts = MONTH_ORDER.map(m => eventos.filter(e => e.mes === m).length);
+            barChart.data.datasets[0].data = counts;
+            barChart.update();
+
+            const years = [...new Set(eventos.map(e => e.year))].filter(Boolean).sort();
+            const yearCounts = years.map(y => eventos.filter(e => e.year === y).length);
+            yearChart.data.labels = years;
+            yearChart.data.datasets[0].data = yearCounts;
+            yearChart.update();
+        }
+
+        // ─────────────────────────────── KPI ─────────────────────────────────────────
+        function updateKPI() {
+            const bodas = eventos.filter(e => e.tipo === 'BODA').length;
+            const xvs = eventos.filter(e => e.tipo === 'XV').length;
+            const tc = eventos.reduce((a, e) => a + e.contrato, 0);
+            const ta = eventos.reduce((a, e) => a + e.totalAbonado, 0);
+            const tp = eventos.reduce((a, e) => a + e.pendiente, 0);
+            document.getElementById('k-total').textContent = eventos.length;
+            document.getElementById('k-bodas').textContent = bodas;
+            document.getElementById('k-xv').textContent = xvs;
+            document.getElementById('k-contratado').textContent = fmt(tc);
+            document.getElementById('k-abonado').textContent = fmt(ta);
+            document.getElementById('k-pendiente').textContent = fmt(tp);
+        }
+
+        // ─────────────────────────────── MONTHS GRID ─────────────────────────────────
+        function updateMonthsGrid() {
+            const grid = document.getElementById('months-grid');
+            grid.innerHTML = '';
+            const used = [...new Set(eventos.map(e => e.mes))].sort((a, b) => MONTH_ORDER.indexOf(a) - MONTH_ORDER.indexOf(b));
+            used.forEach(m => {
+                const evs = eventos.filter(e => e.mes === m);
+                const col = MONTH_COLORS[m] || '#a89bff';
+                const div = document.createElement('div');
+                div.className = 'month-card';
+                div.innerHTML = `
+      <div class="m-name" style="color:${col}">${m}</div>
+      <div class="m-count" style="color:${col}">${evs.length}</div>
+      <div class="m-list">
+        ${evs.map(e => `<span>• ${e.cliente} <span style="color:${e.tipo === 'BODA' ? '#a89bff' : '#ff8fa3'};font-size:.7rem;">(${e.tipo})</span></span>`).join('')}
+      </div>`;
+                grid.appendChild(div);
+            });
+        }
+
+        // ─────────────────────────────── FIN GRID ────────────────────────────────────
+        function updateFinGrid() {
+            const grid = document.getElementById('fin-grid');
+            grid.innerHTML = '';
+            const used = [...new Set(eventos.map(e => e.mes))].sort((a, b) => MONTH_ORDER.indexOf(a) - MONTH_ORDER.indexOf(b));
+            used.forEach(m => {
+                const evs = eventos.filter(e => e.mes === m);
+                const mC = evs.reduce((a, e) => a + e.contrato, 0);
+                const mA = evs.reduce((a, e) => a + e.totalAbonado, 0);
+                const mP = evs.reduce((a, e) => a + e.pendiente, 0);
+                const col = MONTH_COLORS[m] || '#a89bff';
+                const box = document.createElement('div');
+                box.className = 'month-card';
+                box.innerHTML = `
+      <div class="m-name" style="color:${col}">${m}</div>
+      <div class="m-count" style="color:${col};font-size:1.3rem;">${evs.length} evento${evs.length !== 1 ? 's' : ''}</div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;"><span style="color:var(--muted)">Contratado</span><strong>${fmt(mC)}</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;"><span style="color:var(--muted)">Abonado</span><strong style="color:#43e97b">${fmt(mA)}</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;"><span style="color:var(--muted)">Pendiente</span><strong style="color:#ff6584">${fmt(mP)}</strong></div>
+      </div>`;
+                grid.appendChild(box);
+            });
+        }
+
+        function updateYearFinGrid() {
+            const grid = document.getElementById('year-fin-grid');
+            grid.innerHTML = '';
+            const used = [...new Set(eventos.map(e => e.year))].filter(Boolean).sort();
+            used.forEach(y => {
+                const evs = eventos.filter(e => e.year === y);
+                const yC = evs.reduce((a, e) => a + e.contrato, 0);
+                const yA = evs.reduce((a, e) => a + e.totalAbonado, 0);
+                const yP = evs.reduce((a, e) => a + e.pendiente, 0);
+                const col = '#f7971e';
+                const box = document.createElement('div');
+                box.className = 'month-card';
+                box.innerHTML = `
+      <div class="m-name" style="color:${col}">${y}</div>
+      <div class="m-count" style="color:${col};font-size:1.3rem;">${evs.length} evento${evs.length !== 1 ? 's' : ''}</div>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:5px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;"><span style="color:var(--muted)">Contratado</span><strong>${fmt(yC)}</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;"><span style="color:var(--muted)">Abonado</span><strong style="color:#43e97b">${fmt(yA)}</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem;"><span style="color:var(--muted)">Pendiente</span><strong style="color:#ff6584">${fmt(yP)}</strong></div>
+      </div>`;
+                grid.appendChild(box);
+            });
+        }
+
+        // ─────────────────────────────── TABLE ───────────────────────────────────────
+        window.filterTable = function (f, btn) {
+            currentFilter = f;
+            document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            updateTable();
+        };
+
+        function updateTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            let data = eventos;
+            if (currentFilter === 'BODA') data = eventos.filter(e => e.tipo === 'BODA');
+            else if (currentFilter === 'XV') data = eventos.filter(e => e.tipo === 'XV');
+            else if (currentFilter === 'PENDIENTE') data = eventos.filter(e => e.pendiente > 0);
+
+            data.forEach((e, i) => {
+                const sc = e.estado === 'PAGADO' ? 'status-paid' : e.estado === 'PARCIAL' ? 'status-partial' : 'status-none';
+                const si = e.estado === 'PAGADO' ? '✅ Pagado' : e.estado === 'PARCIAL' ? '⚡ Parcial' : '⏳ Pendiente';
+                const tc = e.tipo === 'BODA' ? 'badge-boda' : e.tipo === 'XV' ? 'badge-xv' : 'badge-otro';
+                const ti = e.tipo === 'BODA' ? '💍' : e.tipo === 'XV' ? '👑' : '🎉';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+      <td style="color:var(--muted);font-size:.72rem;font-weight:600;">${i + 1}</td>
+      <td style="font-weight:700;">${e.cliente}</td>
+      <td><span class="event-badge ${tc}">${ti} ${e.tipo}</span></td>
+      <td><div style="font-size:.82rem;">${fmtDate(e.fecha)}</div><span class="month-tag">${e.mes}</span></td>
+      <td style="color:var(--muted);font-size:.8rem;">${e.ubicacion || '–'}</td>
+      <td><span class="amount">${fmt(e.contrato)}</span></td>
+      <td><span class="amount amt-green">${fmt(e.totalAbonado)}</span></td>
+      <td><span class="amount ${e.pendiente > 0 ? 'amt-red' : 'amt-green'}">${fmt(e.pendiente)}</span></td>
+      <td>
+        <div class="bar-wrap">
+          <div class="bar-track"><div class="bar-fill" style="width:${e.pct}%"></div></div>
+          <span style="font-size:.72rem;font-weight:700;min-width:32px;text-align:right;color:${e.pct >= 100 ? '#43e97b' : e.pct > 0 ? '#ffd200' : '#ff8fa3'}">${e.pct}%</span>
+        </div>
+      </td>
+      <td><span class="status-badge ${sc}">${si}</span></td>
+      <td>
+        <div class="action-btns">
+          <button class="btn btn-outline btn-sm" onclick="openModal(${e.id})">✏️</button>
+          <button class="btn btn-danger btn-sm"  onclick="openConfirm(${e.id})">🗑️</button>
+        </div>
+      </td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ─────────────────────────────── RENDER ALL ──────────────────────────────────
+        function renderAll() {
+            updateKPI();
+            updateCharts();
+            updateMonthsGrid();
+            updateFinGrid();
+            updateYearFinGrid();
+            updateTable();
+            checkDuplicates();
+            saveData();
+        }
+
+        function checkDuplicates() {
+            const dateMap = {};
+            eventos.forEach(e => {
+                if (!e.fecha) return;
+                if (!dateMap[e.fecha]) dateMap[e.fecha] = [];
+                dateMap[e.fecha].push(e);
+            });
+
+            const conflicts = Object.entries(dateMap).filter(([date, arr]) => arr.length > 1);
+            const alertBox = document.getElementById('duplicate-alert');
+            const list = document.getElementById('duplicate-list');
+
+            if (conflicts.length > 0) {
+                list.innerHTML = conflicts.map(([date, arr]) => {
+                    const dateStr = fmtDate(date);
+                    const badges = arr.map(x => `<span style="color:#fff;background:${x.tipo === 'BODA' ? '#6c63ff' : '#ff6584'};padding:1px 6px;border-radius:4px;font-size:0.7rem;margin-right:3px;">${x.tipo}</span> <strong>${x.cliente}</strong>`).join(' + ');
+                    return `<li><strong>${dateStr}:</strong> ${badges}</li>`;
+                }).join('');
+                alertBox.classList.add('show');
+            } else {
+                alertBox.classList.remove('show');
+            }
+        }
+
+        // ─────────────────────────────── MODAL ───────────────────────────────────────
+        window.openModal = function (id = null) {
+            editingId = id;
+            document.getElementById('modal-title').textContent = id ? '✏️ Editar Evento' : '➕ Nuevo Evento';
+            document.getElementById('modal-save-btn').textContent = id ? '💾 Guardar Cambios' : '💾 Guardar Evento';
+
+            if (id) {
+                const e = todosLosEventos.find(x => x.id === id);
+                if (!e) return;
+                document.getElementById('f-cliente').value = e.cliente;
+                document.getElementById('f-tipo').value = e.tipo;
+                document.getElementById('f-fecha').value = e.fecha || '';
+                document.getElementById('f-mes').value = e.mes;
+                document.getElementById('f-ubicacion').value = e.ubicacion || '';
+                document.getElementById('f-servicio').value = e.servicio || '';
+                document.getElementById('f-contrato').value = e.contrato;
+                (e.abonos || [0, 0, 0, 0, 0, 0]).forEach((v, i) => {
+                    const el = document.getElementById(`f-a${i + 1}`);
+                    if (el) el.value = v || 0;
+                });
+            } else {
+                document.getElementById('f-cliente').value = '';
+                document.getElementById('f-tipo').value = 'BODA';
+                document.getElementById('f-fecha').value = '';
+                document.getElementById('f-mes').value = 'Enero';
+                document.getElementById('f-ubicacion').value = '';
+                document.getElementById('f-servicio').value = '';
+                document.getElementById('f-contrato').value = '';
+                for (let i = 1; i <= 6; i++) document.getElementById(`f-a${i}`).value = 0;
+            }
+            updatePreview();
+            document.getElementById('modal-overlay').classList.add('open');
+            document.getElementById('f-cliente').focus();
+        };
+
+        window.closeModal = function () {
+            document.getElementById('modal-overlay').classList.remove('open');
+            editingId = null;
+        };
+
+        window.closeModalIfOutside = function (e) {
+            if (e.target === document.getElementById('modal-overlay')) closeModal();
+        };
+
+        function updatePreview() {
+            const c = parseFloat(document.getElementById('f-contrato').value) || 0;
+            let total = 0;
+            for (let i = 1; i <= 6; i++) total += parseFloat(document.getElementById(`f-a${i}`).value) || 0;
+            document.getElementById('preview-abonado').textContent = fmt(total);
+            document.getElementById('preview-pendiente').textContent = fmt(Math.max(0, c - total));
+        }
+
+        // Live preview
+        document.addEventListener('input', e => {
+            if (['f-contrato', 'f-a1', 'f-a2', 'f-a3', 'f-a4', 'f-a5', 'f-a6'].includes(e.target.id)) updatePreview();
+            if (e.target.id === 'f-fecha') {
+                const d = new Date(e.target.value + 'T12:00:00');
+                if (!isNaN(d)) {
+                    const mName = MONTH_ORDER[d.getMonth()];
+                    document.getElementById('f-mes').value = mName;
+                }
+            }
+        });
+
+        window.saveEvento = function () {
+            const cliente = document.getElementById('f-cliente').value.trim();
+            const contrato = parseFloat(document.getElementById('f-contrato').value);
+            if (!cliente) { showToast('⚠️ Ingresa el nombre del cliente', true); return; }
+            if (!contrato || contrato <= 0) { showToast('⚠️ Ingresa el total del contrato', true); return; }
+
+            const abonos = [];
+            for (let i = 1; i <= 6; i++) abonos.push(parseFloat(document.getElementById(`f-a${i}`).value) || 0);
+
+            const payload = {
+                cliente,
+                tipo: document.getElementById('f-tipo').value,
+                fecha: document.getElementById('f-fecha').value,
+                mes: document.getElementById('f-mes').value,
+                ubicacion: document.getElementById('f-ubicacion').value.trim() || '–',
+                servicio: document.getElementById('f-servicio').value.trim() || '–',
+                contrato, abonos
+            };
+
+            if (editingId) {
+                const idx = todosLosEventos.findIndex(x => x.id === editingId);
+                if (idx > -1) {
+                    todosLosEventos[idx] = { ...todosLosEventos[idx], ...payload };
+                    showToast('✅ Evento actualizado correctamente');
+                }
+            } else {
+                payload.id = nextId++;
+                todosLosEventos.push(payload);
+                showToast('✅ Evento agregado correctamente');
+            }
+
+            closeModal();
+            saveData();
+            applyGlobalFilters(); // Reload view with filters applied
+        };
+
+        // ─────────────────────────────── DELETE ──────────────────────────────────────
+        window.openConfirm = function (id) {
+            deletingId = id;
+            document.getElementById('confirm-overlay').classList.add('open');
+        };
+        window.closeConfirm = function () {
+            document.getElementById('confirm-overlay').classList.remove('open');
+            deletingId = null;
+        };
+        document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+            if (deletingId === null) return;
+            todosLosEventos = todosLosEventos.filter(e => e.id !== deletingId);
+            closeConfirm();
+            saveData();
+            applyGlobalFilters();
+            showToast('🗑️ Evento eliminado');
+        });
+
+        // ─────────────────────────────── EXPORT TO EXCEL ───────────────────────────────
+        window.exportarExcel = function () {
+            const dataToExport = eventos.map((e, index) => {
+                const row = {
+                    'No.': index + 1,
+                    'Cliente/Evento': e.cliente,
+                    'Fecha': e.fecha ? new Date(e.fecha + 'T12:00:00').toLocaleDateString('es-MX') : '',
+                    'Mes': e.mes,
+                    'Tipo': e.tipo,
+                    'Ubicacion': e.ubicacion,
+                    'Servicio': e.servicio,
+                    'Salon': e.salon || '',
+                    'Total Contrato': e.contrato,
+                    'Abono 1': e.abonos && e.abonos[0] ? e.abonos[0] : 0,
+                    'Abono 2': e.abonos && e.abonos[1] ? e.abonos[1] : 0,
+                    'Abono 3': e.abonos && e.abonos[2] ? e.abonos[2] : 0,
+                    'Abono 4': e.abonos && e.abonos[3] ? e.abonos[3] : 0,
+                    'Abono 5': e.abonos && e.abonos[4] ? e.abonos[4] : 0,
+                    'Abono 6': e.abonos && e.abonos[5] ? e.abonos[5] : 0,
+                    'Abono 7': e.abonos && e.abonos[6] ? e.abonos[6] : 0,
+                    'Total Abonado': e.totalAbonado,
+                    'Saldo Pendiente': e.pendiente,
+                    'Estado': e.estado
+                };
+                return row;
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+
+            // Calculate auto width for columns
+            const maxWidths = [5, 25, 12, 12, 10, 15, 15, 15, 15, 10, 10, 10, 10, 10, 10, 10, 15, 15, 12];
+            worksheet['!cols'] = maxWidths.map(w => ({ wch: w }));
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Eventos Exportados");
+
+            // Format filename with current date
+            const dateStr = new Date().toISOString().split('T')[0];
+            const currentYearFilter = document.getElementById('global-year-filter').value;
+            const currentMonthFilter = document.getElementById('global-month-filter').value;
+
+            let label = 'Todos';
+            if (currentYearFilter !== 'ALL') label = currentYearFilter;
+            if (currentMonthFilter !== 'ALL') label += '_' + currentMonthFilter;
+
+            XLSX.writeFile(workbook, `BF_Reporte_${label}_${dateStr}.xlsx`);
+            showToast('✅ Respaldo Excel descargado con éxito');
+        };
+
+        // ─────────────────────────────── TOAST ───────────────────────────────────────
+        function showToast(msg, isError = false) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.background = isError
+                ? 'linear-gradient(135deg,#ff4d6d,#ff6584)'
+                : 'linear-gradient(135deg,#6c63ff,#8b80ff)';
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2800);
+        }
+
+        // ─────────────────────────────── ESC KEY ─────────────────────────────────────
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeConfirm(); } });
+
+        // ─────────────────────────────── INIT ────────────────────────────────────────
+        loadData();
+        buildCharts();
+        renderAll();
+    </script>
+</body>
+
+</html>
